@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+    
     @Query("SELECT p FROM Product p WHERE p.category.id = ?1")
     List<Product> findByCategoryId(Long categoryId);
 }
