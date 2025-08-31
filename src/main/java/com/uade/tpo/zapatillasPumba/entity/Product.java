@@ -1,12 +1,6 @@
 package com.uade.tpo.zapatillasPumba.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -17,9 +11,30 @@ public class Product {
     private Long id;
 
     @Column
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @Column
+    private Double price;
+
+    @Column
+    private Integer stock;
+
+    @Column(name = "is_visible")
+    private Boolean isVisible;
+
+    @Column(name = "created_at")
+    private java.time.LocalDateTime createdAt;
+
+    // Relación con categoría (muchos productos pueden tener una categoría)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
+
+    // Relación con usuario vendedor
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private User seller;
 }

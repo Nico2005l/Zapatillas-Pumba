@@ -1,12 +1,8 @@
 package com.uade.tpo.zapatillasPumba.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.util.List;
 
 @Data
 @Entity
@@ -15,8 +11,8 @@ public class Category {
     public Category() {
     }
 
-    public Category(String description) {
-        this.description = description;
+    public Category(String name) {
+        this.name = name;
     }
 
     @Id
@@ -24,8 +20,18 @@ public class Category {
     private Long id;
 
     @Column
-    private String description;
+    private String name;
 
-    @OneToOne(mappedBy = "category")
-    private Product product;
+    // Relación con la categoría padre
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Category parent;
+
+    // Relación con las subcategorías
+    @OneToMany(mappedBy = "parent")
+    private List<Category> subcategories;
+
+    // Relación uno a muchos con productos
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 }

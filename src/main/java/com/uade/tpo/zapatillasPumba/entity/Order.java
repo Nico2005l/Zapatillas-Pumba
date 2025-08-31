@@ -1,14 +1,9 @@
 package com.uade.tpo.zapatillasPumba.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,10 +13,21 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long count;
-
+    // Relación con usuario
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column
+    private Double total;
+
+    @Column
+    private String status;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    // Relación con los ítems de la orden
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> items;
 }
