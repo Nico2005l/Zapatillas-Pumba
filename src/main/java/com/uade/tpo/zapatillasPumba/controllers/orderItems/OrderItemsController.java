@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.service.OrderItem.OrderItemService;
-import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
 
 @RestController
 @RequestMapping("/order-items")
@@ -28,8 +27,8 @@ public class OrderItemsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateOrderItem(@PathVariable Long id, @RequestBody OrderItemRequest request) {
-        orderItemService.updateOrderItem(id, request);
+    public ResponseEntity<Void> updateOrderItem(@PathVariable Long id, @RequestBody OrderItem orderItem) {
+        orderItemService.updateOrderItem(id, orderItem);
         return ResponseEntity.ok().build();
     }
 
