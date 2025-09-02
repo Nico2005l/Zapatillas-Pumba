@@ -8,5 +8,5 @@ public class OrderRequest {
 	private Long userId;
 	private Double total;
 	private String status;
-	private List<Long> itemIds;
+	private List<OrderItemRequest> items;
 }
