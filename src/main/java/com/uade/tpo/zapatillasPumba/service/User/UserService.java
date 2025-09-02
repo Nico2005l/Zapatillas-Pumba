@@ -1,4 +1,4 @@
-package com.uade.tpo.zapatillasPumba.service;
+package com.uade.tpo.zapatillasPumba.service.User;
 
 import java.util.List;
 
