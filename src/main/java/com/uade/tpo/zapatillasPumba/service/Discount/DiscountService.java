@@ -1,13 +1,12 @@
 package com.uade.tpo.zapatillasPumba.service.Discount;
 
 import java.util.List;
+import com.uade.tpo.zapatillasPumba.entity.Discount;
+import com.uade.tpo.zapatillasPumba.controllers.discounts.DiscountRequest;
 
 public interface DiscountService {
-
-    
-    double getDiscountById(Long id);
-    List<Double> getAllDiscounts();
-    void updateDiscount(Long id, double discount);
+    Discount getDiscountById(Long id);
+    List<Discount> getAllDiscounts();
+    void updateDiscount(Long id, DiscountRequest request);
     void deleteDiscount(Long id);
-
 }
