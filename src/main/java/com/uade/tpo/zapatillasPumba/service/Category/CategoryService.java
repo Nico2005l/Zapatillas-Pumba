@@ -1,21 +1,14 @@
-
 package com.uade.tpo.zapatillasPumba.service.Category;
 
-import java.util.Optional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
+import java.util.List;
+import java.util.Optional;
 
 public interface CategoryService {
-    public Page<Category> getCategories(PageRequest pageRequest);
-
-    public Optional<Category> getCategoryById(Long categoryId);
-
-    public Category createCategory(String description) throws CategoryDuplicateException;
-
-    public Optional<Category> updateCategory(Long categoryId, String description);
-
-    public boolean deleteCategory(Long categoryId);
+    List<Category> getCategories();
+    Optional<Category> getCategoryById(Long id);
+    Category createCategory(String name, Long parentId) throws CategoryDuplicateException;
+    Optional<Category> updateCategory(Long id, String name, Long parentId);
+    boolean deleteCategory(Long id);
 }

@@ -1,43 +1,38 @@
 package com.uade.tpo.zapatillasPumba.controllers.categories;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
 import com.uade.tpo.zapatillasPumba.service.Category.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 @RestController
-@RequestMapping("categories")
+@RequestMapping("/categories")
 public class CategoriesController {
 
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * GET /categories : List all categories.
+     * @return A list of all categories.
+     */
     @GetMapping
-    public ResponseEntity<Page<Category>> getCategories(
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size) {
-        if (page == null || size == null)
-            return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(0, Integer.MAX_VALUE)));
-        return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(page, size)));
+    public ResponseEntity<List<Category>> getCategories() {
+        return ResponseEntity.ok(categoryService.getCategories());
     }
 
+    /**
+     * GET /categories/{categoryId} : Get a single category by its ID.
+     * @param categoryId The ID of the category.
+     * @return The category if found, otherwise 404 Not Found.
+     */
     @GetMapping("/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
         Optional<Category> result = categoryService.getCategoryById(categoryId);
@@ -47,29 +42,52 @@ public class CategoriesController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * POST /categories : Create a new category.
+     * Note: Authorization for admin roles should be handled by a security layer.
+     * @param categoryRequest The cate  gory data.
+     * @return The created category with a 201 Created status.
+     * @throws CategoryDuplicateException if a category with the same name already exists.
+     */
     @PostMapping
-    public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
+    public ResponseEntity<Category> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
-        Category result = categoryService.createCategory(categoryRequest.getDescription());
-        return ResponseEntity.created(URI.create("/categories/" + result.getId())).body(result);
+        Category result = categoryService.createCategory(categoryRequest.getName(), categoryRequest.getParentId());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(result.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(result);
     }
 
+    /**
+     * PUT /categories/{categoryId} : Update an existing category.
+     * Note: Authorization for admin roles should be handled by a security layer.
+     * @param categoryId The ID of the category to update.
+     * @param categoryRequest The new category data.
+     * @return The updated category, or 404 Not Found if the category doesn't exist.
+     */
     @PutMapping("/{categoryId}")
     public ResponseEntity<Category> updateCategory(
-        @PathVariable Long categoryId,
-        @RequestBody CategoryRequest categoryRequest) {
-        Optional<Category> updatedCategory = categoryService.updateCategory(categoryId, categoryRequest.getDescription());
-        if (updatedCategory.isPresent()) {
-        return ResponseEntity.ok(updatedCategory.get());
-        }
-        return ResponseEntity.notFound().build();
+            @PathVariable Long categoryId,
+            @RequestBody CategoryRequest categoryRequest) {
+        return categoryService.updateCategory(categoryId, categoryRequest.getName(), categoryRequest.getParentId())
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * DELETE /categories/{categoryId} : Delete a category.
+     * Note: Authorization for admin roles should be handled by a security layer.
+     * @param categoryId The ID of the category to delete.
+     * @return 204 No Content on successful deletion, or 404 Not Found.
+     */
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
         boolean deleted = categoryService.deleteCategory(categoryId);
         if (deleted) {
-        return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }

@@ -1,16 +1,13 @@
 package com.uade.tpo.zapatillasPumba.service.Category;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
 import com.uade.tpo.zapatillasPumba.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -18,41 +15,48 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public Page<Category> getCategories(PageRequest pageable) {
-        return categoryRepository.findAll(pageable);
+    @Override
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
     }
 
-    public Optional<Category> getCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId);
+    @Override
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
     }
 
-    @Transactional(rollbackFor = Throwable.class)
-    public Category createCategory(String name) throws CategoryDuplicateException {
-        List<Category> categories = categoryRepository.findByName(name);
-        if (categories.isEmpty()) {
-            categoryRepository.save(new Category(name));
+    @Override
+    public Category createCategory(String name, Long parentId) throws CategoryDuplicateException {
+        if (categoryRepository.findByName(name).isPresent()) {
+            throw new CategoryDuplicateException();
         }
-
-        throw new CategoryDuplicateException();
-    }
-
-    @Transactional(rollbackFor = Throwable.class)
-    public Optional<Category> updateCategory(Long categoryId, String description) {
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        if (category.isPresent()) {
-            category.get().setName(description);
-            categoryRepository.save(category.get());
-            return category;
+        Category category = new Category();
+        category.setName(name);
+        if (parentId != null) {
+            categoryRepository.findById(parentId).ifPresent(category::setParent);
         }
-        return Optional.empty();
+        return categoryRepository.save(category);
     }
 
-    public boolean deleteCategory(Long categoryId) {
-        if (categoryRepository.existsById(categoryId)) {
-            categoryRepository.deleteById(categoryId);
+    @Override
+    public Optional<Category> updateCategory(Long id, String name, Long parentId) {
+        return categoryRepository.findById(id).map(category -> {
+            category.setName(name);
+            if (parentId != null) {
+                categoryRepository.findById(parentId).ifPresent(category::setParent);
+            } else {
+                category.setParent(null);
+            }
+            return categoryRepository.save(category);
+        });
+    }
+
+    @Override
+    public boolean deleteCategory(Long id) {
+        if (categoryRepository.existsById(id)) {
+            categoryRepository.deleteById(id);
             return true;
         }
         return false;
     }
-
 }
