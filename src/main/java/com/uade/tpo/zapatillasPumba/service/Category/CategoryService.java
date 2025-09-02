@@ -21,12 +21,4 @@ public interface CategoryService {
     public Optional<Category> updateCategory(Long categoryId, String description);
 
     public boolean deleteCategory(Long categoryId);
-
-    public Product createProduct(Category category, ProductRequest productRequest);
-
-    public Optional<Product> getProductById(Long productId);
-
-    public boolean deleteProduct(Long productId);
-
-    public Optional<Product> updateProduct(Long productId, ProductRequest productRequest);
 }
