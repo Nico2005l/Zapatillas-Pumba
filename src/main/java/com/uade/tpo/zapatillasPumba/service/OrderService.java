@@ -7,9 +7,9 @@ import com.uade.tpo.zapatillasPumba.entity.Order;
 
 public interface OrderService {
 
-    void createOrder(Order order);
-    void updateOrder(Long id, Order order);
-    void deleteOrder(Long id);
+    Optional<Order> createOrder(Order order);
+    Optional<Order> updateOrder(Long id, Order order);
+    boolean deleteOrder(Long id);
     List<Order> getAllOrders();
     Optional<Order> getOrderById(Long id);
 }

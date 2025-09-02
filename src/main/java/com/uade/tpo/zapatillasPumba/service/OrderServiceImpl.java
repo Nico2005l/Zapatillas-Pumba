@@ -11,7 +11,7 @@ public class OrderServiceImpl implements OrderService {
     }
     
     @Override
-    public void createOrder(Order order) {
+    public Optional<Order> createOrder(Order order) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createOrder'");
     }
@@ -29,13 +29,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrder(Long id, Order order) {
+    public Optional<Order> updateOrder(Long id, Order order) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateOrder'");
     }
 
     @Override
-    public void deleteOrder(Long id) {
+    public boolean deleteOrder(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteOrder'");
     }
