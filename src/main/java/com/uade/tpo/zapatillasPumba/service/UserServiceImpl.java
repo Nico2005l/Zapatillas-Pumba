@@ -2,8 +2,11 @@ package com.uade.tpo.zapatillasPumba.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.uade.tpo.zapatillasPumba.entity.User;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     public UserServiceImpl() {
