@@ -1,6 +1,7 @@
 package com.uade.tpo.zapatillasPumba.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.uade.tpo.zapatillasPumba.entity.Order;
 
@@ -10,13 +11,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void createOrder(Order order) {
+    public Optional<Order> createOrder(Order order) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createOrder'");
     }
 
     @Override
-    public Order getOrderById(Long id) {
+    public Optional getOrderById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getOrderById'");
     }
@@ -28,13 +29,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrder(Long id, Order order) {
+    public Optional<Order> updateOrder(Long id, Order order) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateOrder'");
     }
 
     @Override
-    public void deleteOrder(Long id) {
+    public boolean deleteOrder(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteOrder'");
     }

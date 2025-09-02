@@ -33,18 +33,18 @@ public class OrdersController {
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.createOrder(order);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+        Optional<Order> createdOrder = orderService.createOrder(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder.orElse(null));
     }
 
     @PutMapping("/{orderId}")
-    public ResponseEntity<Order> updateOrder(@PathVariable String orderId, @RequestBody Order order) {
+    public ResponseEntity<Order> updateOrder(@PathVariable Long orderId, @RequestBody Order order) {
         Optional<Order> updatedOrder = orderService.updateOrder(orderId, order);
         return updatedOrder.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable String orderId) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
         boolean deleted = orderService.deleteOrder(orderId);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
