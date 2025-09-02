@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.uade.tpo.zapatillasPumba.entity.Order;
-import com.uade.tpo.zapatillasPumba.service.OrderService;
+import com.uade.tpo.zapatillasPumba.service.Order.OrderService;
    
 @RestController
 @RequestMapping("/orders")

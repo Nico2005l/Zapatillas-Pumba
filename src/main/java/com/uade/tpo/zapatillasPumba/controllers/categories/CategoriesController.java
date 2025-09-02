@@ -4,10 +4,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.zapatillasPumba.controllers.products.ProductRequest;
 import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
-import com.uade.tpo.zapatillasPumba.service.CategoryService;
+import com.uade.tpo.zapatillasPumba.service.Category.CategoryService;
+
 import java.net.URI;
 import java.util.Optional;
 

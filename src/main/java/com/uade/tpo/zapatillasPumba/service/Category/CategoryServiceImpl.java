@@ -1,4 +1,4 @@
-package com.uade.tpo.zapatillasPumba.service;
+package com.uade.tpo.zapatillasPumba.service.Category;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.uade.tpo.zapatillasPumba.controllers.categories.ProductRequest;
+import com.uade.tpo.zapatillasPumba.controllers.products.ProductRequest;
 import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
