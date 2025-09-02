@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.Discount;
+import com.uade.tpo.zapatillasPumba.service.Discount.DiscountService;
 import com.uade.tpo.zapatillasPumba.controllers.discounts.DiscountRequest;
-import com.uade.tpo.zapatillasPumba.service.DiscountService;
 
 @RestController
 @RequestMapping("/discounts")

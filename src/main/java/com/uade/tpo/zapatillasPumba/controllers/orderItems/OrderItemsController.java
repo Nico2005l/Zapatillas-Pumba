@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
-import com.uade.tpo.zapatillasPumba.service.OrderItemService;
 
 @RestController
 @RequestMapping("/order-items")
