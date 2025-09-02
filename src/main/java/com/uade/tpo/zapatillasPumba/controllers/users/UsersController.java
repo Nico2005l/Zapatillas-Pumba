@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.User;
-import com.uade.tpo.zapatillasPumba.service.UserService;
+import com.uade.tpo.zapatillasPumba.service.User.UserService;
 
 @RestController
 @RequestMapping("users")
