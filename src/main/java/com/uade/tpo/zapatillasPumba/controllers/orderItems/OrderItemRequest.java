@@ -1,4 +1,4 @@
-package com.uade.tpo.zapatillasPumba.controllers.orders;
+package com.uade.tpo.zapatillasPumba.controllers.orderItems;
 
 import lombok.Data;
 
