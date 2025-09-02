@@ -6,8 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.ProductImage;
-import com.uade.tpo.zapatillasPumba.controllers.productImages.ProductImageRequest;
-import com.uade.tpo.zapatillasPumba.service.ProductImageService;
+import com.uade.tpo.zapatillasPumba.service.ProductImage.ProductImageService;
 
 @RestController
 @RequestMapping("/product-images")
@@ -28,8 +27,8 @@ public class ProductImagesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProductImage(@PathVariable Long id, @RequestBody ProductImageRequest request) {
-        productImageService.updateProductImage(id, request);
+    public ResponseEntity<Void> updateProductImage(@PathVariable Long id, @RequestBody ProductImage productImage) {
+        productImageService.updateProductImage(id, productImage);
         return ResponseEntity.ok().build();
     }
 
