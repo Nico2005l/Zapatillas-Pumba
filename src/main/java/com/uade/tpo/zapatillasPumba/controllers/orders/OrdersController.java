@@ -1,24 +1,51 @@
 package com.uade.tpo.zapatillasPumba.controllers.orders;
 
+
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-public class OrdersController {
+import com.uade.tpo.zapatillasPumba.entity.Order;
+import com.uade.tpo.zapatillasPumba.service.OrderService;
    
+@RestController
+@RequestMapping("/orders")
+public class OrdersController {
 
-    public void createOrder() {
-        // Logic to create an order
+    @Autowired
+    private OrderService orderService;
+
+    @GetMapping
+    public ResponseEntity<List<Order>> getAllOrders() {
+        List<Order> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orders);
     }
 
-    public void getOrderById(String orderId) {
-        // Logic to get an order by ID
+    @GetMapping("/{orderId}")
+    public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
+        Optional<Order> order = orderService.getOrderById(orderId);
+        return order.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public void updateOrder(String orderId) {
-        // Logic to update an order
+    @PostMapping
+    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+        Order createdOrder = orderService.createOrder(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
-    public void deleteOrder(String orderId) {
-        // Logic to delete an order
+    @PutMapping("/{orderId}")
+    public ResponseEntity<Order> updateOrder(@PathVariable String orderId, @RequestBody Order order) {
+        Optional<Order> updatedOrder = orderService.updateOrder(orderId, order);
+        return updatedOrder.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable String orderId) {
+        boolean deleted = orderService.deleteOrder(orderId);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
 }

@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -49,5 +51,25 @@ public class CategoriesController {
             throws CategoryDuplicateException {
         Category result = categoryService.createCategory(categoryRequest.getDescription());
         return ResponseEntity.created(URI.create("/categories/" + result.getId())).body(result);
+    }
+
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<Category> updateCategory(
+        @PathVariable Long categoryId,
+        @RequestBody CategoryRequest categoryRequest) {
+        Optional<Category> updatedCategory = categoryService.updateCategory(categoryId, categoryRequest.getDescription());
+        if (updatedCategory.isPresent()) {
+        return ResponseEntity.ok(updatedCategory.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
+        boolean deleted = categoryService.deleteCategory(categoryId);
+        if (deleted) {
+        return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
