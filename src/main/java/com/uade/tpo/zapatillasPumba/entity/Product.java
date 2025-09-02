@@ -1,5 +1,7 @@
 package com.uade.tpo.zapatillasPumba.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,10 +33,13 @@ public class Product {
     // Relación con categoría (muchos productos pueden tener una categoría)
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;
+    private Category category;  
 
     // Relación con usuario vendedor
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private User seller;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> productImages;
 }

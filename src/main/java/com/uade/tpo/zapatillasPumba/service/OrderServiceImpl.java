@@ -1,6 +1,7 @@
 package com.uade.tpo.zapatillasPumba.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.uade.tpo.zapatillasPumba.entity.Order;
 
@@ -16,7 +17,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderById(Long id) {
+    public Optional getOrderById(Long id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getOrderById'");
     }

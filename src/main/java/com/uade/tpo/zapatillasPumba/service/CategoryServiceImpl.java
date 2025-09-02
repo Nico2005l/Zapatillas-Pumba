@@ -9,15 +9,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.tpo.zapatillasPumba.controllers.categories.ProductRequest;
 import com.uade.tpo.zapatillasPumba.entity.Category;
+import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
 import com.uade.tpo.zapatillasPumba.repository.CategoryRepository;
+import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public Page<Category> getCategories(PageRequest pageable) {
         return categoryRepository.findAll(pageable);
@@ -55,4 +61,42 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return false;
     }
+
+    public Optional<Product> getProductById(Long productId) {
+        return productRepository.findProductById(productId);
+    }
+
+    public boolean deleteProduct(Long productId) {
+        if (productRepository.existsProductById(productId)) {
+            productRepository.deleteProductById(productId);
+            return true;
+        }
+        return false;
+    }
+
+    public Optional<Product> updateProduct(Long productId, ProductRequest productRequest) {
+        Optional<Product> product = productRepository.findProductById(productId);
+        if (product.isPresent()) {
+            product.get().setTitle(productRequest.getTitle());
+            product.get().setDescription(productRequest.getDescription());
+            product.get().setPrice(productRequest.getPrice());
+            productRepository.save(product.get());
+            return product;
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Product createProduct(Category category, ProductRequest productRequest) {
+        Product product = new Product();
+        product.setTitle(productRequest.getTitle());
+        product.setDescription(productRequest.getDescription());
+        product.setPrice(productRequest.getPrice());
+        product.setCategory(category);
+        product = productRepository.save(product);
+        category.getProducts().add(product);
+        categoryRepository.save(category);
+        return product;
+    }
+
 }
