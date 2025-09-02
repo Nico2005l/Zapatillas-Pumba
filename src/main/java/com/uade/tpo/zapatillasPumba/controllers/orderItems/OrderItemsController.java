@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
+import com.uade.tpo.zapatillasPumba.service.OrderItem.OrderItemService;
 import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
 
 @RestController
