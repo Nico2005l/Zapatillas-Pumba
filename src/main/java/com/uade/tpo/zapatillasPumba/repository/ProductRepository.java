@@ -18,6 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.id = ?1")
     Optional<Product> findProductById(Long productId);
 
+    @Query("SELECT p FROM Product p WHERE (:category IS NULL OR p.category.name = :category) AND (:seller IS NULL OR p.seller = :seller) AND (:isVisible IS NULL OR p.isVisible = :isVisible)")
+    List<Product> findByCategoryAndSellerAndIsVisible(String category, String seller, Boolean isVisible);
+
     boolean existsProductById(Long productId);
 
     void deleteProductById(Long productId);
