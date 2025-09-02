@@ -2,36 +2,40 @@ package com.uade.tpo.zapatillasPumba.service.Discount;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.uade.tpo.zapatillasPumba.entity.Discount;
+import com.uade.tpo.zapatillasPumba.repository.DiscountRepository;
 
 @Service
 public class DiscountServiceImpl implements DiscountService {
 
-    public DiscountServiceImpl() {
-    }
+    @Autowired
+    private DiscountRepository discountRepository;
 
-    public double getDiscountById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDiscountById'");
+    @Override
+    public List<Discount> getAllDiscounts() {
+        return discountRepository.findAll();
     }
 
     @Override
-    public List<Double> getAllDiscounts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllDiscounts'");
+    public Discount getDiscountById(Long id) {
+        return discountRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void updateDiscount(Long id, double discount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDiscount'");
+    public void updateDiscount(Long id, DiscountRequest request) {
+        Discount discount = discountRepository.findById(id).orElse(null);
+        if (discount != null) {
+            discount.setValue(request.getValue());
+            discountRepository.save(discount);
+        }
     }
 
     @Override
     public void deleteDiscount(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteDiscount'");
+        discountRepository.deleteById(id);
     }
-
     
 }
