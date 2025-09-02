@@ -9,12 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.uade.tpo.zapatillasPumba.controllers.products.ProductRequest;
 import com.uade.tpo.zapatillasPumba.entity.Category;
-import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
 import com.uade.tpo.zapatillasPumba.repository.CategoryRepository;
-import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
