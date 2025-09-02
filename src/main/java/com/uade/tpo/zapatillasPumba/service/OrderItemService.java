@@ -1,5 +1,5 @@
 package com.uade.tpo.zapatillasPumba.service;
 
-public class OrderItemService {
+public interface OrderItemService {
     
 }
