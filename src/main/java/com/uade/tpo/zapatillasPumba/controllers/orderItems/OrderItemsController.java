@@ -20,4 +20,12 @@ public class OrderItemsController {
     public List<OrderItem> getOrderItemsByOrderId(@RequestParam Long orderId) {
         return orderItemService.getOrderItemsByOrderId(orderId);
     }
+
+    @PostMapping
+    public ResponseEntity<OrderItem> createOrderItem(@RequestBody OrderItemRequest orderItemRequest
+    ) {
+        OrderItem createdOrderItem = orderItemService.createOrderItem(orderItemRequest);
+        return ResponseEntity.ok(createdOrderItem);
+    }
+    
 }
