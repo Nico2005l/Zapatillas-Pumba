@@ -31,11 +31,4 @@ public class Discount {
 
     @Column(name = "is_active")
     private Boolean isActive;
-
-    public boolean isActiveNow() {
-        LocalDateTime now = LocalDateTime.now();
-        return Boolean.TRUE.equals(isActive)
-            && (startAt == null || !now.isBefore(startAt))
-            && (endAt == null || !now.isAfter(endAt));
-    }
 }
