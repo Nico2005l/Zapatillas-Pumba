@@ -11,4 +11,5 @@ public interface DiscountService {
     Discount createDiscount(DiscountRequest request) throws DiscountProductNotFoundException;
     Discount updateDiscount(Long id, DiscountRequest request) ;
     void deleteDiscount(Long id);
+    boolean applyDiscountToProduct(Long discountId, Long productId);
 }

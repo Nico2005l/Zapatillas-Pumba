@@ -44,4 +44,12 @@ public class DiscountsController {
         Discount createdDiscount = discountService.createDiscount(discountRequest);
         return ResponseEntity.ok(createdDiscount);
     }
+
+    @PutMapping("/{discountId}/apply-to-product/{productId}")
+    public ResponseEntity<Void> applyDiscountToProduct(
+            @PathVariable Long discountId,
+            @PathVariable Long productId) {
+        boolean applied = discountService.applyDiscountToProduct(discountId, productId);
+        return applied ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }    
 }
