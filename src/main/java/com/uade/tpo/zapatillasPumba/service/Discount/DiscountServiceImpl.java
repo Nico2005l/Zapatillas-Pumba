@@ -28,7 +28,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public void updateDiscount(Long id, DiscountRequest request) {
+    public Discount updateDiscount(Long id, DiscountRequest request) {
         Discount discount = discountRepository.findById(id).orElse(null);
         if (discount != null) {
             discount.setType(request.getType());
@@ -37,8 +37,14 @@ public class DiscountServiceImpl implements DiscountService {
             discount.setEndAt(request.getEndAt());
             discount.setIsActive(request.getIsActive());
             // Si necesitas actualizar el producto, deberías buscarlo y setearlo aquí
-            discountRepository.save(discount);
+            return discountRepository.save(discount);
         }
+        return null;
+    }
+
+    @Override
+    public Discount createDiscount(Discount discount) {
+        return discountRepository.save(discount);
     }
 
     @Override

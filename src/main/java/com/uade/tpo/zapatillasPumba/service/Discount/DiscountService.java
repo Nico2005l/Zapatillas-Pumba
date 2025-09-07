@@ -7,6 +7,7 @@ import com.uade.tpo.zapatillasPumba.controllers.discounts.DiscountRequest;
 public interface DiscountService {
     Discount getDiscountById(Long id);
     List<Discount> getAllDiscounts();
-    void updateDiscount(Long id, DiscountRequest request);
+    Discount createDiscount(Discount request);
+    Discount updateDiscount(Long id, DiscountRequest request);
     void deleteDiscount(Long id);
 }
