@@ -4,7 +4,6 @@ import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.entity.ProductImage;
 import com.uade.tpo.zapatillasPumba.repository.ProductImageRepository;
 import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
-import com.uade.tpo.zapatillasPumba.controllers.productImages.ProductImageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

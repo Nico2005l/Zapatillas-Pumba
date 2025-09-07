@@ -2,11 +2,8 @@ package com.uade.tpo.zapatillasPumba.service.Discount;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
-
 import com.uade.tpo.zapatillasPumba.entity.Discount;
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.exceptions.DiscountProductNotFoundException;

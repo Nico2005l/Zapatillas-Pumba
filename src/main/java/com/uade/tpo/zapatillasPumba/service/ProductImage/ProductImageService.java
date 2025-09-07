@@ -1,7 +1,6 @@
 package com.uade.tpo.zapatillasPumba.service.ProductImage;
 
 import com.uade.tpo.zapatillasPumba.entity.ProductImage;
-import com.uade.tpo.zapatillasPumba.controllers.productImages.ProductImageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
