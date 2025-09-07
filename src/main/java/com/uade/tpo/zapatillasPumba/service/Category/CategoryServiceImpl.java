@@ -17,7 +17,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getCategories() {
-        return categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+        categories.removeIf(category -> category.getParent() != null);
+        for (Category parent : categories) {
+            parent.setChildren(
+                categoryRepository.findAll().stream()
+                    .filter(child -> child.getParent() != null && child.getParent().getId().equals(parent.getId()))
+                    .toList()
+            );
+        }
+        return categories;
     }
 
     @Override
