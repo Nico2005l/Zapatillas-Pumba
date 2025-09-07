@@ -10,10 +10,4 @@ import org.springframework.stereotype.Repository;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 	@Query("select oi from OrderItem oi where oi.order.id = ?1")
 	List<OrderItem> findByOrderId(Long orderId);
-
-	@Query("select oi from OrderItem oi where oi.product.id = ?1")
-	List<OrderItem> findByProductId(Long productId);
-
-	@Query("select oi from OrderItem oi where oi.seller.id = ?1")
-	List<OrderItem> findBySellerId(Long sellerId);
 }
