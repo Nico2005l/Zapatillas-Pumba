@@ -50,5 +50,10 @@ public class OrderServiceImpl implements OrderService {
         }
         return false;
     }
-    
+
+    @Override
+    public List<Order> getOrderByUserId(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
 }
