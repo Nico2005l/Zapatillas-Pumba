@@ -2,6 +2,8 @@ package com.uade.tpo.zapatillasPumba.service.Category;
 
 import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
+import com.uade.tpo.zapatillasPumba.exceptions.CategoryHasProductsException;
+import com.uade.tpo.zapatillasPumba.exceptions.CategoryNotFoundException;
 import com.uade.tpo.zapatillasPumba.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getCategoryById(Long id) {
-        return categoryRepository.findById(id);
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+            .orElseThrow(CategoryNotFoundException::new);
     }
 
     @Override
@@ -30,33 +33,48 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryRepository.findByName(name).isPresent()) {
             throw new CategoryDuplicateException();
         }
+        
         Category category = new Category();
         category.setName(name);
+        
         if (parentId != null) {
-            categoryRepository.findById(parentId).ifPresent(category::setParent);
+            Category parent = categoryRepository.findById(parentId)
+                .orElseThrow(CategoryNotFoundException::new);
+            category.setParent(parent);
         }
+        
         return categoryRepository.save(category);
     }
 
     @Override
-    public Optional<Category> updateCategory(Long id, String name, Long parentId) {
-        return categoryRepository.findById(id).map(category -> {
-            category.setName(name);
-            if (parentId != null) {
-                categoryRepository.findById(parentId).ifPresent(category::setParent);
-            } else {
-                category.setParent(null);
-            }
-            return categoryRepository.save(category);
-        });
+    public Category updateCategory(Long id, String name, Long parentId) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(CategoryNotFoundException::new);
+        
+        category.setName(name);
+        
+        if (parentId != null) {
+            Category parent = categoryRepository.findById(parentId)
+                .orElseThrow(CategoryNotFoundException::new);
+            category.setParent(parent);
+        } else {
+            category.setParent(null);
+        }
+        
+        return categoryRepository.save(category);
     }
 
     @Override
-    public boolean deleteCategory(Long id) {
-        if (categoryRepository.existsById(id)) {
-            categoryRepository.deleteById(id);
-            return true;
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id)
+            .orElseThrow(CategoryNotFoundException::new);
+        
+        // Verificar si la categoría tiene productos asociados
+        if (category.getProducts() != null && !category.getProducts().isEmpty()) {
+            throw new CategoryHasProductsException();
         }
-        return false;
+        
+        // No tiene productos, se puede eliminar
+        categoryRepository.delete(category);
     }
 }

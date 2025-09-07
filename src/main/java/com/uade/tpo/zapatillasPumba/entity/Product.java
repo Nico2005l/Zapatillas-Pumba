@@ -2,6 +2,9 @@ package com.uade.tpo.zapatillasPumba.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -33,7 +36,8 @@ public class Product {
     // Relación con categoría (muchos productos pueden tener una categoría)
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;  
+    @JsonBackReference("category-products")  // Detiene recursión a la categoría
+    private Category category;
 
     // Relación con usuario vendedor
     @ManyToOne
@@ -41,5 +45,6 @@ public class Product {
     private User seller;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ProductImage> productImages;
 }

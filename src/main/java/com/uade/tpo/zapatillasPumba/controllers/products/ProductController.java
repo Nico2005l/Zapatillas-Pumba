@@ -1,58 +1,86 @@
 package com.uade.tpo.zapatillasPumba.controllers.products;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.service.Product.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.util.List;
 
+@RestController
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products")
+    /**
+     * GET /products : List all products with optional filtering
+     * @param category Filter by category ID
+     * @param seller Filter by seller ID
+     * @param isVisible Filter by visibility
+     * @return A list of products matching the criteria
+     */
+    @GetMapping
     public ResponseEntity<List<Product>> getProducts(
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) String seller,
+            @RequestParam(required = false) Long category,
+            @RequestParam(required = false) Long seller,
             @RequestParam(required = false) Boolean isVisible) {
-        List<Product> products = productService.getProducts(category, seller, isVisible);
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(productService.getProducts(category, seller, isVisible));
     }
 
-    @PostMapping("/products")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product createdProduct = productService.createProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+    /**
+     * POST /products : Create a new product
+     * @param productRequest Product data
+     * @return The created product with 201 Created status
+     */
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
+        Product product = productService.createProduct(productRequest);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(product.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(product);
     }
 
-    @PutMapping("/products/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product product) {
-        Product updatedProduct = productService.updateProduct(productId, product);
-        return ResponseEntity.ok(updatedProduct);
-    }
-
-    @GetMapping("/products/{productId}")
-    public ResponseEntity<Product> getProduct(@PathVariable Long productId) {
+    /**
+     * GET /products/{productId} : Get a product by ID
+     * @param productId The product ID
+     * @return The product if found
+     */
+    @GetMapping("/{productId}")
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Product product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
     }
 
-    @DeleteMapping("/products/{productId}")
+    /**
+     * PUT /products/{productId} : Update a product
+     * @param productId The product ID
+     * @param productRequest Updated product data
+     * @return The updated product
+     */
+    @PutMapping("/{productId}")
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long productId,
+            @RequestBody ProductRequest productRequest) {
+        Product updated = productService.updateProduct(productId, productRequest);
+        return ResponseEntity.ok(updated);
+    }
+
+    /**
+     * DELETE /products/{productId} : Delete a product
+     * @param productId The product ID
+     * @return 204 No Content on success
+     */
+    @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
         productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
-
 }

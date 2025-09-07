@@ -17,11 +17,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.id = ?1")
     Optional<Product> findProductById(Long productId);
+    
+    Optional<Product> findByTitle(String title);
 
-    @Query("SELECT p FROM Product p WHERE (:category IS NULL OR p.category.name = :category) AND (:seller IS NULL OR p.seller = :seller) AND (:isVisible IS NULL OR p.isVisible = :isVisible)")
-    List<Product> findByCategoryAndSellerAndIsVisible(String category, String seller, Boolean isVisible);
-
-    boolean existsProductById(Long productId);
-
-    void deleteProductById(Long productId);
+    boolean existsById(Long productId);
+    
+    boolean existsByTitle(String title);
 }
