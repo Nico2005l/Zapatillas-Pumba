@@ -68,4 +68,17 @@ public class DiscountServiceImpl implements DiscountService {
     public void deleteDiscount(Long id) {
         discountRepository.deleteById(id);
     }
+
+    public boolean applyDiscountToProduct(Long discountId, Long productId) {
+    Optional<Discount> discountOpt = discountRepository.findById(discountId);
+    Optional<Product> productOpt = productRepository.findById(productId);
+
+    if (discountOpt.isPresent() && productOpt.isPresent()) {
+        Product product = productOpt.get();
+        product.setDiscount(discountOpt.get()); // Asume que Product tiene un campo Discount
+        productRepository.save(product);
+        return true;
+    }
+    return false;
+}
 }
