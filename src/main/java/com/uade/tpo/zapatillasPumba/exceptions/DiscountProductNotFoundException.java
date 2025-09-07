@@ -1,9 +1,11 @@
 package com.uade.tpo.zapatillasPumba.exceptions;
 
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.http.HttpStatus;
+public class DiscountProductNotFoundException extends RuntimeException {
+    public DiscountProductNotFoundException(String message) {
+        super(message);
+    }
 
-@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "El producto con el ID especificado no fue encontrado.")
-public class DiscountProductNotFoundException extends Exception {
-
+    public DiscountProductNotFoundException() {
+        super("No se encontró el producto asociado al descuento.");
+    }
 }

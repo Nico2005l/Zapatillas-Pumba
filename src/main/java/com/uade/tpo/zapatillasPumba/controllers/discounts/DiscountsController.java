@@ -1,13 +1,16 @@
 package com.uade.tpo.zapatillasPumba.controllers.discounts;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import java.util.List;
-
 import com.uade.tpo.zapatillasPumba.entity.Discount;
 import com.uade.tpo.zapatillasPumba.exceptions.DiscountProductNotFoundException;
 import com.uade.tpo.zapatillasPumba.service.Discount.DiscountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/discounts")
@@ -17,8 +20,8 @@ public class DiscountsController {
     private DiscountService discountService;
 
     @GetMapping
-    public List<Discount> getAllDiscounts() {
-        return discountService.getAllDiscounts();
+    public ResponseEntity<List<Discount>> getAllDiscounts() {
+        return ResponseEntity.ok(discountService.getAllDiscounts());
     }
 
     @GetMapping("/{id}")
@@ -27,29 +30,63 @@ public class DiscountsController {
         return discount != null ? ResponseEntity.ok(discount) : ResponseEntity.notFound().build();
     }
 
+    @PostMapping
+    public ResponseEntity<Discount> createDiscount(@RequestBody DiscountRequest request) {
+        try {
+            Discount created = discountService.createDiscount(request);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(created.getId())
+                    .toUri();
+            return ResponseEntity.created(location).body(created);
+        } catch (DiscountProductNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateDiscount(@PathVariable Long id, @RequestBody DiscountRequest request) {
-        discountService.updateDiscount(id, request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Discount> updateDiscount(@PathVariable Long id, @RequestBody DiscountRequest request) {
+        try {
+            Discount updated = discountService.updateDiscount(id, request);
+            return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+        } catch (DiscountProductNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDiscount(@PathVariable Long id) {
         discountService.deleteDiscount(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
-    public ResponseEntity<Discount> createDiscount(@RequestBody DiscountRequest discountRequest) throws DiscountProductNotFoundException {
-        Discount createdDiscount = discountService.createDiscount(discountRequest);
-        return ResponseEntity.ok(createdDiscount);
+    @PutMapping("/{id}/assign/{productId}")
+    public ResponseEntity<Void> assignDiscountToProduct(@PathVariable Long id, @PathVariable Long productId) {
+        try {
+            discountService.assignDiscountToProduct(id, productId);
+            return ResponseEntity.ok().build();
+        } catch (DiscountProductNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
-    @PutMapping("/{discountId}/apply-to-product/{productId}")
-    public ResponseEntity<Void> applyDiscountToProduct(
-            @PathVariable Long discountId,
-            @PathVariable Long productId) {
-        boolean applied = discountService.applyDiscountToProduct(discountId, productId);
-        return applied ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
-    }    
+    @PostMapping("/{id}/clone/{productId}")
+    public ResponseEntity<Discount> cloneDiscountToProduct(@PathVariable Long id, @PathVariable Long productId) {
+        try {
+            Discount copy = discountService.cloneDiscountToProduct(id, productId);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .replacePath("/discounts/{id}")
+                    .buildAndExpand(copy.getId())
+                    .toUri();
+            return ResponseEntity.created(location).body(copy);
+        } catch (DiscountProductNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<List<Discount>> getDiscountsForProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(discountService.getDiscountsForProduct(productId));
+    }
 }

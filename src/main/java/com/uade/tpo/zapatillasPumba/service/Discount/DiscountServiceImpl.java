@@ -2,8 +2,11 @@ package com.uade.tpo.zapatillasPumba.service.Discount;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.uade.tpo.zapatillasPumba.entity.Discount;
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.exceptions.DiscountProductNotFoundException;
@@ -22,8 +25,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount getDiscountById(Long id) {
-        Optional<Discount> discount = discountRepository.findById(id);
-        return discount.orElse(null);
+        return discountRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -32,53 +34,84 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
+    @Transactional
     public Discount updateDiscount(Long id, DiscountRequest request) {
-        Discount discount = discountRepository.findById(id).orElse(null);
-        if (discount != null) {
-            discount.setType(request.getType());
-            discount.setValue(request.getValue());
-            discount.setStartAt(request.getStartAt());
-            discount.setEndAt(request.getEndAt());
-            discount.setIsActive(request.getIsActive());
-           
-            return discountRepository.save(discount);
+        Optional<Discount> opt = discountRepository.findById(id);
+        if (opt.isEmpty()) return null;
+
+        Discount discount = opt.get();
+        discount.setType(request.getType());
+        discount.setValue(request.getValue());
+        discount.setStartAt(request.getStartAt());
+        discount.setEndAt(request.getEndAt());
+        discount.setIsActive(request.getIsActive());
+
+        // Si viene productId en el request y querés actualizar la asociación:
+        if (request.getProductId() != null) {
+            Product product = productRepository.findById(request.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+            discount.setProduct(product);
         }
-        return null;
+
+        return discountRepository.save(discount);
     }
 
     @Override
+    @Transactional
     public Discount createDiscount(DiscountRequest request) throws DiscountProductNotFoundException {
         Discount discount = new Discount();
-        Product product = productRepository.findById(request.getProductId()).orElse(null);
+        discount.setType(request.getType());
+        discount.setValue(request.getValue());
+        discount.setStartAt(request.getStartAt());
+        discount.setEndAt(request.getEndAt());
+        discount.setIsActive(request.getIsActive());
 
-        if (product != null) {
-                discount.setProduct(product);
-                discount.setType(request.getType());
-                discount.setValue(request.getValue());
-                discount.setStartAt(request.getStartAt());
-                discount.setEndAt(request.getEndAt());
-                discount.setIsActive(request.getIsActive());
-                return discountRepository.save(discount);
-        } else{
-            throw new DiscountProductNotFoundException();
+        if (request.getProductId() != null) {
+            Product product = productRepository.findById(request.getProductId())
+                    .orElseThrow(() -> new DiscountProductNotFoundException("Product not found"));
+            discount.setProduct(product);
         }
+        return discountRepository.save(discount);
     }
 
     @Override
+    @Transactional
     public void deleteDiscount(Long id) {
         discountRepository.deleteById(id);
     }
 
-    public boolean applyDiscountToProduct(Long discountId, Long productId) {
-    Optional<Discount> discountOpt = discountRepository.findById(discountId);
-    Optional<Product> productOpt = productRepository.findById(productId);
+    @Transactional
+    public void assignDiscountToProduct(Long discountId, Long productId) throws DiscountProductNotFoundException {
+        Discount discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new DiscountProductNotFoundException("Discount not found"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new DiscountProductNotFoundException("Product not found"));
 
-    if (discountOpt.isPresent() && productOpt.isPresent()) {
-        Product product = productOpt.get();
-        product.setDiscount(discountOpt.get()); // Asume que Product tiene un campo Discount
-        productRepository.save(product);
-        return true;
+        discount.setProduct(product);
+        discountRepository.save(discount);
     }
-    return false;
-}
+
+
+    @Transactional
+    public Discount cloneDiscountToProduct(Long discountId, Long productId) throws DiscountProductNotFoundException {
+        Discount original = discountRepository.findById(discountId)
+                .orElseThrow(() -> new DiscountProductNotFoundException("Discount not found"));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new DiscountProductNotFoundException("Product not found"));
+
+        Discount copy = new Discount();
+        copy.setType(original.getType());
+        copy.setValue(original.getValue());
+        copy.setStartAt(original.getStartAt());
+        copy.setEndAt(original.getEndAt());
+        copy.setIsActive(original.getIsActive());
+        copy.setProduct(product);
+
+        return discountRepository.save(copy);
+    }
+
+
+    public List<Discount> getDiscountsForProduct(Long productId) {
+        return discountRepository.findByProductId(productId);
+    }
 }
