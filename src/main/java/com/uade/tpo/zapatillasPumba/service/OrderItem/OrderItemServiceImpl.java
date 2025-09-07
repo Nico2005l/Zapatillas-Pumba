@@ -44,6 +44,11 @@ public class OrderItemServiceImpl implements OrderItemService {
         Product product = productRepository.findById(orderItemRequest.getProductId()).orElse(null);
         if (product == null) {
             throw new IllegalArgumentException("Invalid product ID");
+        } else if (product.getStock() < orderItemRequest.getQuantity()) {
+            throw new IllegalArgumentException("Insufficient stock for product ID: " + product.getId());
+        } else {
+            product.setStock(product.getStock() - orderItemRequest.getQuantity());
+            productRepository.save(product);
         }
         User seller = userRepository.findById(orderItemRequest.getSellerId()).orElse(null);
         if (seller == null) {
