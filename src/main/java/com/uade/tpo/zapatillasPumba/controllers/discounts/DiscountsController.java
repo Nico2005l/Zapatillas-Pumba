@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.Discount;
+import com.uade.tpo.zapatillasPumba.exceptions.DiscountProductNotFoundException;
 import com.uade.tpo.zapatillasPumba.service.Discount.DiscountService;
 
 @RestController
@@ -36,5 +37,11 @@ public class DiscountsController {
     public ResponseEntity<Void> deleteDiscount(@PathVariable Long id) {
         discountService.deleteDiscount(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Discount> createDiscount(@RequestBody DiscountRequest discountRequest) throws DiscountProductNotFoundException {
+        Discount createdDiscount = discountService.createDiscount(discountRequest);
+        return ResponseEntity.ok(createdDiscount);
     }
 }

@@ -4,17 +4,24 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.zapatillasPumba.entity.Discount;
+import com.uade.tpo.zapatillasPumba.entity.Product;
+import com.uade.tpo.zapatillasPumba.exceptions.DiscountProductNotFoundException;
 import com.uade.tpo.zapatillasPumba.controllers.discounts.DiscountRequest;
 import com.uade.tpo.zapatillasPumba.repository.DiscountRepository;
+import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
 
 @Service
 public class DiscountServiceImpl implements DiscountService {
 
     @Autowired
     private DiscountRepository discountRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public Discount getDiscountById(Long id) {
@@ -36,15 +43,28 @@ public class DiscountServiceImpl implements DiscountService {
             discount.setStartAt(request.getStartAt());
             discount.setEndAt(request.getEndAt());
             discount.setIsActive(request.getIsActive());
-            // Si necesitas actualizar el producto, deberías buscarlo y setearlo aquí
+           
             return discountRepository.save(discount);
         }
         return null;
     }
 
     @Override
-    public Discount createDiscount(Discount discount) {
-        return discountRepository.save(discount);
+    public Discount createDiscount(DiscountRequest request) throws DiscountProductNotFoundException {
+        Discount discount = new Discount();
+        Product product = productRepository.findById(request.getProductId()).orElse(null);
+
+        if (product != null) {
+                discount.setProduct(product);
+                discount.setType(request.getType());
+                discount.setValue(request.getValue());
+                discount.setStartAt(request.getStartAt());
+                discount.setEndAt(request.getEndAt());
+                discount.setIsActive(request.getIsActive());
+                return discountRepository.save(discount);
+        } else{
+            throw new DiscountProductNotFoundException();
+        }
     }
 
     @Override
