@@ -61,16 +61,6 @@ public class DiscountsController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/assign/{productId}")
-    public ResponseEntity<Void> assignDiscountToProduct(@PathVariable Long id, @PathVariable Long productId) {
-        try {
-            discountService.assignDiscountToProduct(id, productId);
-            return ResponseEntity.ok().build();
-        } catch (DiscountProductNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
     @PostMapping("/{id}/clone/{productId}")
     public ResponseEntity<Discount> cloneDiscountToProduct(@PathVariable Long id, @PathVariable Long productId) {
         try {

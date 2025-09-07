@@ -13,7 +13,6 @@ public interface DiscountService {
     Discount createDiscount(DiscountRequest request) throws DiscountProductNotFoundException;
     Discount updateDiscount(Long id, DiscountRequest request) throws DiscountProductNotFoundException;
     void deleteDiscount(Long id);
-    void assignDiscountToProduct(Long discountId, Long productId) throws DiscountProductNotFoundException;
     Discount cloneDiscountToProduct(Long discountId, Long productId) throws DiscountProductNotFoundException;
     List<Discount> getDiscountsForProduct(Long productId);
 }
