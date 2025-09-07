@@ -6,6 +6,7 @@ import lombok.Data;
 public class OrderItemRequest {
     private Long productId;
     private Long sellerId;
+    private Long orderId;
     private Double unitPrice;
     private Double discountApplied;
     private Integer quantity;
