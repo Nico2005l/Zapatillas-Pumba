@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProductImageRequest {
-    private Long productId;
+    // Eliminamos productId ya que vendrá en la URL
+    // Solo mantenemos otros campos que podríamos necesitar
     private String imageUrl;
 }
