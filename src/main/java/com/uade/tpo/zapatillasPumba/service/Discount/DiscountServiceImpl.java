@@ -80,16 +80,6 @@ public class DiscountServiceImpl implements DiscountService {
         discountRepository.deleteById(id);
     }
 
-    @Transactional
-    public void assignDiscountToProduct(Long discountId, Long productId) throws DiscountProductNotFoundException {
-        Discount discount = discountRepository.findById(discountId)
-                .orElseThrow(() -> new DiscountProductNotFoundException("Discount not found"));
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new DiscountProductNotFoundException("Product not found"));
-
-        discount.setProduct(product);
-        discountRepository.save(discount);
-    }
 
 
     @Transactional
