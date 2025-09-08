@@ -50,6 +50,7 @@ public class OrdersController {
             response.setTotal(order.getTotal());
             response.setStatus(order.getStatus());
             response.setCreatedAt(order.getCreatedAt());
+            response.setItems(itemResponses);
             // Aquí deberías mapear los items si es necesario
             return response;
         }).toList();
