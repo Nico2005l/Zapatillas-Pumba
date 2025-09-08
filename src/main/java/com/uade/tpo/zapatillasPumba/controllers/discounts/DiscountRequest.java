@@ -1,13 +1,13 @@
 package com.uade.tpo.zapatillasPumba.controllers.discounts;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Data
 public class DiscountRequest {
     private Long productId;
-    private String type;
     private Double value;
-    private LocalDateTime startAt;
-    private LocalDateTime endAt;
+    private LocalDate startAt;
+    private LocalDate endAt;
 }

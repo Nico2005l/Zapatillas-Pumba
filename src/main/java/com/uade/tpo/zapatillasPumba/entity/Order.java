@@ -2,6 +2,8 @@ package com.uade.tpo.zapatillasPumba.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class Order {
     private String status;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     // Relación con los ítems de la orden
     @OneToMany(mappedBy = "order")

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.tpo.zapatillasPumba.entity.Discount;
 import com.uade.tpo.zapatillasPumba.entity.Product;
+import com.uade.tpo.zapatillasPumba.exceptions.DiscountOutOfRangeException;
 import com.uade.tpo.zapatillasPumba.exceptions.DiscountProductNotFoundException;
 import com.uade.tpo.zapatillasPumba.controllers.discounts.DiscountRequest;
 import com.uade.tpo.zapatillasPumba.repository.DiscountRepository;
@@ -35,16 +36,20 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     @Transactional
-    public Discount updateDiscount(Long id, DiscountRequest request) {
+    public Discount updateDiscount(Long id, DiscountRequest request) throws DiscountProductNotFoundException {
         Optional<Discount> opt = discountRepository.findById(id);
         if (opt.isEmpty()) return null;
 
         Discount discount = opt.get();
-        discount.setType(request.getType());
-        discount.setValue(request.getValue());
-        discount.setStartAt(request.getStartAt());
-        discount.setEndAt(request.getEndAt());
-        discount.setIsActive(true);
+        if (request.getValue() < 0 || request.getValue() > 1.00) {
+            throw new DiscountOutOfRangeException();
+        } else {
+            discount.setValue(request.getValue());
+            discount.setStartAt(request.getStartAt());
+            discount.setEndAt(request.getEndAt());
+            discount.setIsActive(true);
+            discount.setValue(request.getValue());
+        }
 
         // Si viene productId en el request y querés actualizar la asociación:
         if (request.getProductId() != null) {
@@ -60,11 +65,15 @@ public class DiscountServiceImpl implements DiscountService {
     @Transactional
     public Discount createDiscount(DiscountRequest request) throws DiscountProductNotFoundException {
         Discount discount = new Discount();
-        discount.setType(request.getType());
-        discount.setValue(request.getValue());
-        discount.setStartAt(request.getStartAt());
-        discount.setEndAt(request.getEndAt());
-        discount.setIsActive(true);
+        if (request.getValue() < 0 || request.getValue() > 1.00) {
+            throw new DiscountOutOfRangeException();
+        } else {
+            discount.setValue(request.getValue());
+            discount.setStartAt(request.getStartAt());
+            discount.setEndAt(request.getEndAt());
+            discount.setIsActive(true);
+            discount.setValue(request.getValue());
+        }
 
         if (request.getProductId() != null) {
             Product product = productRepository.findById(request.getProductId())
@@ -90,7 +99,6 @@ public class DiscountServiceImpl implements DiscountService {
                 .orElseThrow(() -> new DiscountProductNotFoundException("Product not found"));
 
         Discount copy = new Discount();
-        copy.setType(original.getType());
         copy.setValue(original.getValue());
         copy.setStartAt(original.getStartAt());
         copy.setEndAt(original.getEndAt());

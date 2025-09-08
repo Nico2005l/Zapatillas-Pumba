@@ -3,10 +3,13 @@ package com.uade.tpo.zapatillasPumba.controllers.orderItems;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.service.OrderItem.OrderItemService;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
 
 @RestController
@@ -17,15 +20,37 @@ public class OrderItemsController {
     private OrderItemService orderItemService;
 
     @GetMapping
-    public List<OrderItem> getOrderItemsByOrderId(@RequestParam Long orderId) {
-        return orderItemService.getOrderItemsByOrderId(orderId);
+    public List<OrderItemResponse> getOrderItemsByOrderId(@RequestParam Long orderId) {
+
+       List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+       for (OrderItem item : orderItemService.getOrderItemsByOrderId(orderId)) {
+           OrderItemResponse response = new OrderItemResponse();
+           response.setId(item.getId());
+           response.setOrderId(item.getOrder().getId());
+           response.setProductId(item.getProduct().getId());
+           response.setSellerId(item.getSeller().getId());
+           response.setUnitPrice(item.getUnitPrice());
+           response.setDiscountApplied(item.getDiscountApplied());
+           response.setQuantity(item.getQuantity());
+           orderItemResponses.add(response);
+       }
+        return orderItemResponses;
     }
 
     @PostMapping
-    public ResponseEntity<OrderItem> createOrderItem(@RequestBody OrderItemRequest orderItemRequest
-    ) {
-        OrderItem createdOrderItem = orderItemService.createOrderItem(orderItemRequest);
-        return ResponseEntity.ok(createdOrderItem);
+    public OrderItemResponse createOrderItem(@RequestBody OrderItemRequest orderItemRequest) {
+
+        OrderItemResponse createdOrderItem = new OrderItemResponse();
+        OrderItem orderItem = orderItemService.createOrderItem(orderItemRequest);
+        createdOrderItem.setId(orderItem.getId());
+        createdOrderItem.setOrderId(orderItem.getOrder().getId());
+        createdOrderItem.setProductId(orderItem.getProduct().getId());
+        createdOrderItem.setSellerId(orderItem.getSeller().getId());
+        createdOrderItem.setUnitPrice(orderItem.getUnitPrice());
+        createdOrderItem.setDiscountApplied(orderItem.getDiscountApplied());
+        createdOrderItem.setQuantity(orderItem.getQuantity());
+
+        return createdOrderItem;
     }
     
 }

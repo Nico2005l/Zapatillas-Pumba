@@ -2,7 +2,8 @@ package com.uade.tpo.zapatillasPumba.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -18,16 +19,13 @@ public class Discount {
     private Product product;
 
     @Column
-    private String type;
-
-    @Column
     private Double value;
 
     @Column(name = "start_at")
-    private LocalDateTime startAt;
+    private LocalDate startAt;
 
     @Column(name = "end_at")
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     @Column(name = "is_active")
     private Boolean isActive;
