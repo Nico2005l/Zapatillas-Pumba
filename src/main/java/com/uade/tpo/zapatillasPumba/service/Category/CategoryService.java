@@ -11,12 +11,12 @@ public interface CategoryService {
     
     Category getCategoryById(Long id) throws CategoryNotFoundException;
     
-    Category createCategory(String name, Long parentId) 
+    Category createCategory(String name, Long parentId)
         throws CategoryDuplicateException, CategoryNotFoundException;
     
-    Category updateCategory(Long id, String name, Long parentId) 
+    Category updateCategory(Long id, String name, Long parentId)
         throws CategoryNotFoundException;
     
-    void deleteCategory(Long id) 
+    void deleteCategory(Long id)
         throws CategoryNotFoundException, CategoryHasProductsException;
 }

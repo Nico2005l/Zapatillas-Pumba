@@ -15,6 +15,7 @@ import com.uade.tpo.zapatillasPumba.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/* Es una clase de configuracion, aca es donde se configuran los beans de Spring para la autenticacion y seguridad */
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
