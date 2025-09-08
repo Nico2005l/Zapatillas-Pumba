@@ -1,6 +1,9 @@
 package com.uade.tpo.zapatillasPumba.entity;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.cglib.core.Local;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -31,7 +34,7 @@ public class Product {
     private Boolean isVisible;
 
     @Column(name = "created_at")
-    private java.time.LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     // Relación con categoría (muchos productos pueden tener una categoría)
     @ManyToOne

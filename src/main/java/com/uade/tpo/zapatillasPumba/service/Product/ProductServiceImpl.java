@@ -54,7 +54,8 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productRequest.getPrice());
         product.setStock(productRequest.getStock());
         product.setIsVisible(productRequest.getIsVisible());
-        
+        product.setCreatedAt(java.time.LocalDate.now());
+
         // Asignar categoría si existe
         if (productRequest.getCategoryId() != null) {
             Category category = categoryRepository.findById(productRequest.getCategoryId())
