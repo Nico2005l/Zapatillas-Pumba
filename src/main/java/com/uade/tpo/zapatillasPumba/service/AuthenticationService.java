@@ -27,8 +27,11 @@ public class AuthenticationService {
                                 .firstName(request.getFirstname())
                                 .lastName(request.getLastname())
                                 .email(request.getEmail())
+                                .username(request.getUsername())
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(request.getRole())
+                                .isActive(true)
+                                .createdAt(java.time.LocalDateTime.now())
                                 .build();
 
                 repository.save(user);
@@ -41,11 +44,11 @@ public class AuthenticationService {
         public AuthenticationResponse authenticate(AuthenticationRequest request) {
                 authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(
-                                                request.getEmail(),
+                                                request.getUsername(),
                                                 request.getPassword()));
 
-                var user = repository.findByEmail(request.getEmail())
-                                .orElseThrow();
+                var user = repository.findByUsername(request.getUsername())
+                                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
