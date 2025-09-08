@@ -10,5 +10,4 @@ public class DiscountRequest {
     private Double value;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
-    private Boolean isActive;
 }

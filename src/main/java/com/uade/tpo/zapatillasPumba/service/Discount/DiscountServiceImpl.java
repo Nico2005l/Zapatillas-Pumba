@@ -44,7 +44,7 @@ public class DiscountServiceImpl implements DiscountService {
         discount.setValue(request.getValue());
         discount.setStartAt(request.getStartAt());
         discount.setEndAt(request.getEndAt());
-        discount.setIsActive(request.getIsActive());
+        discount.setIsActive(true);
 
         // Si viene productId en el request y querés actualizar la asociación:
         if (request.getProductId() != null) {
@@ -64,7 +64,7 @@ public class DiscountServiceImpl implements DiscountService {
         discount.setValue(request.getValue());
         discount.setStartAt(request.getStartAt());
         discount.setEndAt(request.getEndAt());
-        discount.setIsActive(request.getIsActive());
+        discount.setIsActive(true);
 
         if (request.getProductId() != null) {
             Product product = productRepository.findById(request.getProductId())
