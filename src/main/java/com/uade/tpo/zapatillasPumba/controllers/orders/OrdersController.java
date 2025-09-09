@@ -4,10 +4,7 @@ package com.uade.tpo.zapatillasPumba.controllers.orders;
 import java.util.List;
 import java.util.Optional;
 
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemResponse;
@@ -15,10 +12,9 @@ import com.uade.tpo.zapatillasPumba.entity.Order;
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.service.Order.OrderService;
 
-import io.jsonwebtoken.security.Jwks.OP;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/orders")

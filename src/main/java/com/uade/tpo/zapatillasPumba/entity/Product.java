@@ -3,7 +3,6 @@ package com.uade.tpo.zapatillasPumba.entity;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

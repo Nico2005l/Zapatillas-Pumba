@@ -2,15 +2,14 @@ package com.uade.tpo.zapatillasPumba.controllers.orderItems;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.service.OrderItem.OrderItemService;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
-import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
+
 
 @RestController
 @RequestMapping("/order-items")
