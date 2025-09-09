@@ -2,6 +2,7 @@ package com.uade.tpo.zapatillasPumba.controllers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,14 +29,25 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                                .requestMatchers("/error/**").permitAll()
-                                                // Solo ADMIN puede hacer cualquier cosa sobre categorías y productos
-                                                .requestMatchers("/categories/**", "/products/**").hasAuthority(Role.ADMIN.name())
-                                                // Pero los usuarios pueden hacer GET sobre categorías y productos
-                                                .requestMatchers(org.springframework.http.HttpMethod.GET, "/categories/**", "/products/**").permitAll()
-                                                .anyRequest()
-                                                .authenticated())
+                                                // Rutas públicas para todos (autenticación y errores)
+                                                .requestMatchers("/api/v1/auth/**", "/error/**").permitAll()
+                                                
+                                                // GUEST puede ver productos, categorías e imágenes
+                                                .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/productImages/**").permitAll()
+                                                
+                                                // USER puede gestionar órdenes y ver descuentos
+                                                .requestMatchers("/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
+                                                .requestMatchers(HttpMethod.GET, "/discounts/**").hasAuthority(Role.USER.name())
+                                                
+                                                // ADMIN puede hacer todo excepto crear órdenes y order items
+                                                .requestMatchers(HttpMethod.POST, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
+                                                .requestMatchers(HttpMethod.PUT, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
+                                                
+                                                // ADMIN tiene acceso a todo el resto
+                                                .requestMatchers("/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
+                                                
+                                                // Cualquier otra ruta requiere autenticación
+                                                .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
