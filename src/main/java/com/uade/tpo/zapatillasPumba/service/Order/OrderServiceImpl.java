@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.zapatillasPumba.controllers.orders.OrderRequest;
+import com.uade.tpo.zapatillasPumba.controllers.orders.OrderResponse;
 import com.uade.tpo.zapatillasPumba.entity.Order;
 import com.uade.tpo.zapatillasPumba.entity.User;
 import com.uade.tpo.zapatillasPumba.repository.OrderRepository;
 import com.uade.tpo.zapatillasPumba.repository.UserRepository;
+import com.uade.tpo.zapatillasPumba.service.mapper.OrderMapper;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -20,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private OrderMapper orderMapper;
 
     public OrderServiceImpl() {
     }
@@ -49,5 +54,29 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getOrderByUserId(Long userId) {
         return orderRepository.findByUserId(userId);
     }
-
+    
+    // DTO methods implementation
+    @Override
+    public Optional<OrderResponse> createOrderResponse(OrderRequest order) {
+        Optional<Order> createdOrder = createOrder(order);
+        return orderMapper.toDto(createdOrder);
+    }
+    
+    @Override
+    public List<OrderResponse> getAllOrderResponses() {
+        List<Order> orders = getAllOrders();
+        return orderMapper.toDtoList(orders);
+    }
+    
+    @Override
+    public Optional<OrderResponse> getOrderResponseById(Long id) {
+        Optional<Order> order = getOrderById(id);
+        return orderMapper.toDto(order);
+    }
+    
+    @Override
+    public List<OrderResponse> getOrderResponsesByUserId(Long userId) {
+        List<Order> orders = getOrderByUserId(userId);
+        return orderMapper.toDtoList(orders);
+    }
 }

@@ -1,15 +1,16 @@
 package com.uade.tpo.zapatillasPumba.service.OrderItem;
 
 import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
+import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemResponse;
 import com.uade.tpo.zapatillasPumba.entity.Order;
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.entity.Product;
-
 import com.uade.tpo.zapatillasPumba.entity.Discount;
 import com.uade.tpo.zapatillasPumba.repository.DiscountRepository;
 import com.uade.tpo.zapatillasPumba.repository.OrderItemRepository;
 import com.uade.tpo.zapatillasPumba.repository.OrderRepository;
 import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
+import com.uade.tpo.zapatillasPumba.service.mapper.OrderItemMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     private ProductRepository productRepository;
 
     @Autowired
-    private DiscountRepository discountRepository;  
-
+    private DiscountRepository discountRepository;
+    
+    @Autowired
+    private OrderItemMapper orderItemMapper;
     
     @Override
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
@@ -64,5 +67,17 @@ public class OrderItemServiceImpl implements OrderItemService {
 
         order.setTotal(order.getTotal() + (product.getPrice() * orderItemRequest.getQuantity() - (orderItem.getDiscountApplied() * product.getPrice() * orderItemRequest.getQuantity())));
         return orderItemRepository.save(orderItem);
+    }
+    
+    @Override
+    public List<OrderItemResponse> getOrderItemResponsesByOrderId(Long orderId) {
+        List<OrderItem> items = getOrderItemsByOrderId(orderId);
+        return orderItemMapper.toDtoList(items);
+    }
+    
+    @Override
+    public OrderItemResponse createOrderItemResponse(OrderItemRequest orderItemRequest) {
+        OrderItem createdItem = createOrderItem(orderItemRequest);
+        return orderItemMapper.toDto(createdItem);
     }
 }
