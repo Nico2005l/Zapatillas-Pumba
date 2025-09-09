@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.service.OrderItem.OrderItemService;
-import com.uade.tpo.zapatillasPumba.entity.OrderItem;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/order-items")
