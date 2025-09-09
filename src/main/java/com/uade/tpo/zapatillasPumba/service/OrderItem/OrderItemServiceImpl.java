@@ -60,7 +60,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItem.setDiscountApplied(discount.map(Discount::getValue).orElse(0.0));
         orderItem.setOrder(order);
         orderItem.setProduct(product);
-        orderItem.setUnitPrice(orderItemRequest.getUnitPrice());
         orderItem.setQuantity(orderItemRequest.getQuantity());
         return orderItemRepository.save(orderItem);
     }

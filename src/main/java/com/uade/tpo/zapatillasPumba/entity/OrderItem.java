@@ -21,11 +21,9 @@ public class OrderItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "unit_price")
-    private Double unitPrice;
-
     @Column(name = "discount_applied")
     private Double discountApplied;
+
 
     @Column(name = "quantity")
     private Integer quantity;

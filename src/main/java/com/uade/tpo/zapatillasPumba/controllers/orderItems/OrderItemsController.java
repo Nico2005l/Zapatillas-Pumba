@@ -28,7 +28,7 @@ public class OrderItemsController {
            response.setId(item.getId());
            response.setOrderId(item.getOrder().getId());
            response.setProductId(item.getProduct().getId());
-           response.setUnitPrice(item.getUnitPrice());
+           response.setUnitPrice(item.getProduct().getPrice());
            response.setDiscountApplied(item.getDiscountApplied());
            response.setQuantity(item.getQuantity());
            orderItemResponses.add(response);
@@ -44,11 +44,11 @@ public class OrderItemsController {
         createdOrderItem.setId(orderItem.getId());
         createdOrderItem.setOrderId(orderItem.getOrder().getId());
         createdOrderItem.setProductId(orderItem.getProduct().getId());
-        createdOrderItem.setUnitPrice(orderItem.getUnitPrice());
+        createdOrderItem.setUnitPrice(orderItem.getProduct().getPrice());
         createdOrderItem.setDiscountApplied(orderItem.getDiscountApplied());
         createdOrderItem.setQuantity(orderItem.getQuantity());
-        createdOrderItem.setSubTotal(orderItem.getUnitPrice() * orderItem.getQuantity());
-        createdOrderItem.setTotal(createdOrderItem.getSubTotal() - (orderItem.getDiscountApplied() * createdOrderItem.getSubTotal()));
+        createdOrderItem.setSubTotal(createdOrderItem.getUnitPrice() * createdOrderItem.getQuantity());
+        createdOrderItem.setTotal(createdOrderItem.getSubTotal() - (createdOrderItem.getDiscountApplied() * createdOrderItem.getSubTotal()));
 
         return createdOrderItem;
     }

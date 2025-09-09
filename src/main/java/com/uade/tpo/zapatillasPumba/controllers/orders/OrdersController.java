@@ -38,7 +38,7 @@ public class OrdersController {
                 itemResponse.setId(item.getId());
                 itemResponse.setOrderId(item.getOrder().getId());
                 itemResponse.setProductId(item.getProduct().getId());
-                itemResponse.setUnitPrice(item.getUnitPrice());
+                itemResponse.setUnitPrice(item.getProduct().getPrice());
                 itemResponse.setDiscountApplied(item.getDiscountApplied());
                 itemResponse.setQuantity(item.getQuantity());
                 return itemResponse;
@@ -102,7 +102,7 @@ public class OrdersController {
                 itemResponse.setId(item.getId());
                 itemResponse.setOrderId(item.getOrder().getId());
                 itemResponse.setProductId(item.getProduct().getId());
-                itemResponse.setUnitPrice(item.getUnitPrice());
+                itemResponse.setUnitPrice(item.getProduct().getPrice());
                 itemResponse.setDiscountApplied(item.getDiscountApplied());
                 itemResponse.setQuantity(item.getQuantity());
                 return itemResponse;

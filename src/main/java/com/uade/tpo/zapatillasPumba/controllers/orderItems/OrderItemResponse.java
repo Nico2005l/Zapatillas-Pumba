@@ -11,7 +11,6 @@ public class OrderItemResponse {
     private Double unitPrice;
     private Double discountApplied;
     private Integer quantity;
-
     private Double subTotal;
     private Double total;
 }
