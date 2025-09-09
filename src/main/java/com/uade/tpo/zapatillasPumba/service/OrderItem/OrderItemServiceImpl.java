@@ -5,6 +5,8 @@ import com.uade.tpo.zapatillasPumba.entity.Order;
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.entity.User;
+import com.uade.tpo.zapatillasPumba.entity.Discount;
+import com.uade.tpo.zapatillasPumba.repository.DiscountRepository;
 import com.uade.tpo.zapatillasPumba.repository.OrderItemRepository;
 import com.uade.tpo.zapatillasPumba.repository.OrderRepository;
 import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
@@ -26,6 +28,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private DiscountRepository discountRepository;  
 
     @Autowired
     private UserRepository userRepository;
@@ -54,12 +59,18 @@ public class OrderItemServiceImpl implements OrderItemService {
         if (seller == null) {
             throw new IllegalArgumentException("Invalid seller ID");
         }
+
+        
+
         OrderItem orderItem = new OrderItem();
+
+        Discount discount = discountRepository.findByProductId(product.getId()).get(0);
+        
+        orderItem.setDiscountApplied(discount.getValue());
         orderItem.setOrder(order);
         orderItem.setProduct(product);
         orderItem.setSeller(seller);
         orderItem.setUnitPrice(orderItemRequest.getUnitPrice());
-        orderItem.setDiscountApplied(orderItemRequest.getDiscountApplied());
         orderItem.setQuantity(orderItemRequest.getQuantity());
         return orderItemRepository.save(orderItem);
     }

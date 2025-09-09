@@ -8,6 +8,5 @@ public class OrderItemRequest {
     private Long sellerId;
     private Long orderId;
     private Double unitPrice;
-    private Double discountApplied;
     private Integer quantity;
 }
