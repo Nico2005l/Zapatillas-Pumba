@@ -35,16 +35,18 @@ public class SecurityConfig {
                                                 // GUEST puede ver productos, categorías e imágenes
                                                 .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/productImages/**").permitAll()
                                                 
-                                                // USER puede gestionar órdenes y ver descuentos
-                                                .requestMatchers("/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
-                                                .requestMatchers(HttpMethod.GET, "/discounts/**").hasAuthority(Role.USER.name())
+                                                // GET a descuentos - permitido para USER y ADMIN
+                                                .requestMatchers(HttpMethod.GET, "/discounts/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
                                                 
-                                                // ADMIN puede hacer todo excepto crear órdenes y order items
+                                                // USER puede gestionar órdenes
                                                 .requestMatchers(HttpMethod.POST, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
                                                 .requestMatchers(HttpMethod.PUT, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
+                                                .requestMatchers(HttpMethod.GET, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
                                                 
-                                                // ADMIN tiene acceso a todo el resto
-                                                .requestMatchers("/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
+                                                // ADMIN tiene acceso a todo el resto (modificación de productos, categorías, imágenes)
+                                                .requestMatchers(HttpMethod.POST, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
+                                                .requestMatchers(HttpMethod.PUT, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
+                                                .requestMatchers(HttpMethod.DELETE, "/categories/**", "/products/**", "/productImages/**", "/discounts/**", "/orders/**", "/order-items/**").hasAuthority(Role.ADMIN.name())
                                                 
                                                 // Cualquier otra ruta requiere autenticación
                                                 .anyRequest().authenticated())
