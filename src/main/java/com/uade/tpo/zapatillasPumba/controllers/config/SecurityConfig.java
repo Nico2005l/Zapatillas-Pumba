@@ -40,13 +40,13 @@ public class SecurityConfig {
                                                 
                                                 // USER puede gestionar órdenes
                                                 .requestMatchers(HttpMethod.POST, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
-                                                .requestMatchers(HttpMethod.PUT, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
-                                                .requestMatchers(HttpMethod.GET, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
-                                                
+                                                .requestMatchers(HttpMethod.GET, "/orders/**", "/order-items/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+
                                                 // ADMIN tiene acceso a todo el resto (modificación de productos, categorías, imágenes)
+                                                .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.POST, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.PUT, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
-                                                .requestMatchers(HttpMethod.DELETE, "/categories/**", "/products/**", "/productImages/**", "/discounts/**", "/orders/**", "/order-items/**").hasAuthority(Role.ADMIN.name())
+                                                .requestMatchers(HttpMethod.DELETE,"/users/**", "/categories/**", "/products/**", "/productImages/**", "/discounts/**", "/orders/**", "/order-items/**").hasAuthority(Role.ADMIN.name())
                                                 
                                                 // Cualquier otra ruta requiere autenticación
                                                 .anyRequest().authenticated())

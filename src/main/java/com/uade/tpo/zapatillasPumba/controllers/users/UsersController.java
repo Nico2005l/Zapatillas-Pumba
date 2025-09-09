@@ -30,17 +30,14 @@ public class UsersController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PutMapping("/{userId}")
-	public ResponseEntity<Void> updateUser(
-		@PathVariable Long userId,
-		@RequestBody User user) {
-		userService.updateUser(userId, user);
-		return ResponseEntity.noContent().build();
-	}
 
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
 		userService.deleteUser(userId);
 		return ResponseEntity.noContent().build();
 	}
+
+	// A futuro podemos implementar updateUser si es necesario, para eso estaba el UserRequest originalmente
+
 }
+
