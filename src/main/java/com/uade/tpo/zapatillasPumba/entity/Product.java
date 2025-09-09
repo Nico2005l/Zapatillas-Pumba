@@ -42,11 +42,6 @@ public class Product {
     @JsonBackReference("category-products")  // Detiene recursión a la categoría
     private Category category;
 
-    // Relación con usuario vendedor
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
-    private User seller;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ProductImage> productImages;

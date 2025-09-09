@@ -10,7 +10,7 @@ import com.uade.tpo.zapatillasPumba.exceptions.ProductNotFoundException;
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getProducts(Long categoryId, Long sellerId, Boolean isVisible);
+    List<Product> getProducts(Long categoryId, Boolean isVisible);
     
     Product createProduct(ProductRequest productRequest) 
             throws InvalidProductDataException, ProductAlreadyExistsException, CategoryNotFoundException;

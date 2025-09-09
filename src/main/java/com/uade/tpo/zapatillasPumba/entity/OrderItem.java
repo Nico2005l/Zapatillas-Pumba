@@ -21,11 +21,6 @@ public class OrderItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // Relación con el vendedor
-    @ManyToOne
-    @JoinColumn(name = "seller_id", nullable = false)
-    private User seller;
-
     @Column(name = "unit_price")
     private Double unitPrice;
 

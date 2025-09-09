@@ -20,7 +20,6 @@ import io.jsonwebtoken.security.Jwks.OP;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-   
 @RestController
 @RequestMapping("/orders")
 public class OrdersController {
@@ -39,7 +38,6 @@ public class OrdersController {
                 itemResponse.setId(item.getId());
                 itemResponse.setOrderId(item.getOrder().getId());
                 itemResponse.setProductId(item.getProduct().getId());
-                itemResponse.setSellerId(item.getSeller().getId());
                 itemResponse.setUnitPrice(item.getUnitPrice());
                 itemResponse.setDiscountApplied(item.getDiscountApplied());
                 itemResponse.setQuantity(item.getQuantity());
@@ -104,7 +102,6 @@ public class OrdersController {
                 itemResponse.setId(item.getId());
                 itemResponse.setOrderId(item.getOrder().getId());
                 itemResponse.setProductId(item.getProduct().getId());
-                itemResponse.setSellerId(item.getSeller().getId());
                 itemResponse.setUnitPrice(item.getUnitPrice());
                 itemResponse.setDiscountApplied(item.getDiscountApplied());
                 itemResponse.setQuantity(item.getQuantity());

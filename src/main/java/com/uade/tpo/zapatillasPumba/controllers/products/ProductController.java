@@ -20,16 +20,14 @@ public class ProductController {
     /**
      * GET /products : List all products with optional filtering
      * @param category Filter by category ID
-     * @param seller Filter by seller ID
      * @param isVisible Filter by visibility
      * @return A list of products matching the criteria
      */
     @GetMapping
     public ResponseEntity<List<Product>> getProducts(
             @RequestParam(required = false) Long category,
-            @RequestParam(required = false) Long seller,
             @RequestParam(required = false) Boolean isVisible) {
-        return ResponseEntity.ok(productService.getProducts(category, seller, isVisible));
+        return ResponseEntity.ok(productService.getProducts(category, isVisible));
     }
 
     /**

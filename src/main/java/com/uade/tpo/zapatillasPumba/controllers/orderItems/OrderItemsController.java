@@ -28,7 +28,6 @@ public class OrderItemsController {
            response.setId(item.getId());
            response.setOrderId(item.getOrder().getId());
            response.setProductId(item.getProduct().getId());
-           response.setSellerId(item.getSeller().getId());
            response.setUnitPrice(item.getUnitPrice());
            response.setDiscountApplied(item.getDiscountApplied());
            response.setQuantity(item.getQuantity());
@@ -45,7 +44,6 @@ public class OrderItemsController {
         createdOrderItem.setId(orderItem.getId());
         createdOrderItem.setOrderId(orderItem.getOrder().getId());
         createdOrderItem.setProductId(orderItem.getProduct().getId());
-        createdOrderItem.setSellerId(orderItem.getSeller().getId());
         createdOrderItem.setUnitPrice(orderItem.getUnitPrice());
         createdOrderItem.setDiscountApplied(orderItem.getDiscountApplied());
         createdOrderItem.setQuantity(orderItem.getQuantity());

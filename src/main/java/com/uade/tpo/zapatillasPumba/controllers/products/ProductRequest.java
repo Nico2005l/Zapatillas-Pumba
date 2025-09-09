@@ -14,6 +14,5 @@ public class ProductRequest {
     private Integer stock;
     private Boolean isVisible;
     private Long categoryId;
-    private Long sellerId;
     private List<ProductImage> productImages;
 }
