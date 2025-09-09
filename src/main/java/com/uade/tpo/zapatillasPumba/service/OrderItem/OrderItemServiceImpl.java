@@ -4,12 +4,9 @@ import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
 import com.uade.tpo.zapatillasPumba.entity.Order;
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.entity.Product;
-<<<<<<< HEAD
-import com.uade.tpo.zapatillasPumba.entity.User;
+
 import com.uade.tpo.zapatillasPumba.entity.Discount;
 import com.uade.tpo.zapatillasPumba.repository.DiscountRepository;
-=======
->>>>>>> ca69470fc8e449ca27014f4b19b92887ff0b36c5
 import com.uade.tpo.zapatillasPumba.repository.OrderItemRepository;
 import com.uade.tpo.zapatillasPumba.repository.OrderRepository;
 import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
@@ -31,15 +28,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Autowired
     private ProductRepository productRepository;
 
-<<<<<<< HEAD
     @Autowired
     private DiscountRepository discountRepository;  
 
-    @Autowired
-    private UserRepository userRepository;
-
-=======
->>>>>>> ca69470fc8e449ca27014f4b19b92887ff0b36c5
+    
     @Override
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
         return orderItemRepository.findByOrderId(orderId);
