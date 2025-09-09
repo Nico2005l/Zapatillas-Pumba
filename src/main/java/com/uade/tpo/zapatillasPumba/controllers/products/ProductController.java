@@ -17,12 +17,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    /**
-     * GET /products : List all products with optional filtering
-     * @param category Filter by category ID
-     * @param isVisible Filter by visibility
-     * @return A list of products matching the criteria
-     */
     @GetMapping
     public ResponseEntity<List<Product>> getProducts(
             @RequestParam(required = false) Long category,
@@ -30,39 +24,25 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(category, isVisible));
     }
 
-    /**
-     * POST /products : Create a new product
-     * @param productRequest Product data
-     * @return The created product with 201 Created status
-     */
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
         Product product = productService.createProduct(productRequest);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(product.getId())
-                .toUri();
+        URI location = ServletUriComponentsBuilder // Es otra forma de hacer las URIs
+            .fromCurrentRequest()          // Toma la URL actual (/products)
+            .path("/{id}")                 // Añade "/{id}" al final
+            .buildAndExpand(product.getId()) // Reemplaza {id} con el ID real del producto
+            .toUri();                      // Convierte todo a un objeto URI
         return ResponseEntity.created(location).body(product);
     }
 
-    /**
-     * GET /products/{productId} : Get a product by ID
-     * @param productId The product ID
-     * @return The product if found
-     */
+
     @GetMapping("/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Product product = productService.getProductById(productId);
         return ResponseEntity.ok(product);
     }
 
-    /**
-     * PUT /products/{productId} : Update a product
-     * @param productId The product ID
-     * @param productRequest Updated product data
-     * @return The updated product
-     */
+
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(
             @PathVariable Long productId,
@@ -71,11 +51,7 @@ public class ProductController {
         return ResponseEntity.ok(updated);
     }
 
-    /**
-     * DELETE /products/{productId} : Delete a product
-     * @param productId The product ID
-     * @return 204 No Content on success
-     */
+  
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
         productService.deleteProduct(productId);

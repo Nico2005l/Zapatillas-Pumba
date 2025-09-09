@@ -47,8 +47,8 @@ public class ProductImagesController {
         }
         
         return ResponseEntity.ok()
-                .header("Content-Type", image.getImageType())
-                .header("Content-Disposition", "inline; filename=\"" + image.getImageName() + "\"")
+                .header("Content-Type", image.getImageType()) // Esto nos permite servir la imagen con su tipo correcto
+                .header("Content-Disposition", "inline; filename=\"" + image.getImageName() + "\"") // Esto sugiere al navegador cómo manejar el archivo, lo musestra en vez de descargarlo
                 .body(image.getImageData());
     }
 

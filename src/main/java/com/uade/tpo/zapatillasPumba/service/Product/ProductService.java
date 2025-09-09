@@ -12,15 +12,15 @@ import java.util.List;
 public interface ProductService {
     List<Product> getProducts(Long categoryId, Boolean isVisible);
     
-    Product createProduct(ProductRequest productRequest) 
+    Product createProduct(ProductRequest productRequest)
             throws InvalidProductDataException, ProductAlreadyExistsException, CategoryNotFoundException;
     
-    Product getProductById(Long productId) 
+    Product getProductById(Long productId)
             throws ProductNotFoundException;
     
-    Product updateProduct(Long productId, ProductRequest productRequest) 
+    Product updateProduct(Long productId, ProductRequest productRequest)
             throws ProductNotFoundException, InvalidProductDataException, ProductAlreadyExistsException, CategoryNotFoundException;
     
-    void deleteProduct(Long productId) 
+    void deleteProduct(Long productId)
             throws ProductNotFoundException;
 }

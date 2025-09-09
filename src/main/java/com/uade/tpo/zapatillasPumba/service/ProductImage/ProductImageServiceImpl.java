@@ -55,8 +55,8 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public boolean imageExistsForProduct(Long productId, Long imageId) {
         Optional<ProductImage> image = productImageRepository.findById(imageId);
-        return image.isPresent() && 
-               image.get().getProduct() != null && 
+        return image.isPresent() &&
+               image.get().getProduct() != null &&
                image.get().getProduct().getId().equals(productId);
     }
 }
