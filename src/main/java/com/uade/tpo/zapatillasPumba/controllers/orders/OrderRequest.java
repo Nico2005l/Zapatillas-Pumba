@@ -8,7 +8,5 @@ import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
 @Data
 public class OrderRequest {
 	private Long userId;
-	private Double total;
 	private String status;
-	private List<OrderItemRequest> items;
 }

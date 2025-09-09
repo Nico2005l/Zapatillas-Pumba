@@ -33,6 +33,9 @@ public class OrdersController {
         List<OrderResponse> orderResponses = orders.stream().map(order -> {
             OrderResponse response = new OrderResponse();
             List<OrderItem> items = order.getItems();
+            Double total = items.stream().mapToDouble(item -> {
+                return item.getQuantity() * item.getProduct().getPrice() - (item.getDiscountApplied() * item.getQuantity() * item.getProduct().getPrice());
+            }).sum();
             List<OrderItemResponse> itemResponses = items.stream().map(item -> {
                 OrderItemResponse itemResponse = new OrderItemResponse();
                 itemResponse.setId(item.getId());
@@ -43,11 +46,12 @@ public class OrdersController {
                 itemResponse.setQuantity(item.getQuantity());
                 itemResponse.setSubTotal(itemResponse.getUnitPrice() * itemResponse.getQuantity());
                 itemResponse.setTotal(itemResponse.getSubTotal() - (itemResponse.getDiscountApplied() * itemResponse.getSubTotal()));
+                
                 return itemResponse;
             }).toList();
             response.setId(order.getId());
             response.setUserId(order.getUser().getId());
-            response.setTotal(order.getTotal());
+            response.setTotal(total);
             response.setStatus(order.getStatus());
             response.setCreatedAt(order.getCreatedAt());
             response.setItems(itemResponses);
@@ -67,6 +71,9 @@ public class OrdersController {
         if (order.isPresent()) {
             Order foundOrder = order.get();
             List<OrderItem> items = foundOrder.getItems();
+            Double total = items.stream().mapToDouble(item -> {
+                return item.getQuantity() * item.getProduct().getPrice() - (item.getDiscountApplied() * item.getQuantity() * item.getProduct().getPrice());
+            }).sum();
             List<OrderItemResponse> itemResponses = items.stream().map(item -> {
                 OrderItemResponse itemResponse = new OrderItemResponse();
                 itemResponse.setId(item.getId());
@@ -82,7 +89,7 @@ public class OrdersController {
             response.setItems(itemResponses);
             response.setId(foundOrder.getId());
             response.setUserId(foundOrder.getUser().getId());
-            response.setTotal(foundOrder.getTotal());
+            response.setTotal(total);
             response.setStatus(foundOrder.getStatus());
             response.setCreatedAt(foundOrder.getCreatedAt());
 
@@ -114,6 +121,9 @@ public class OrdersController {
         return results.stream().map(order -> {
             OrderResponse response = new OrderResponse();
             List<OrderItem> items = order.getItems();
+            Double total = items.stream().mapToDouble(item -> {
+                return item.getQuantity() * item.getProduct().getPrice() - (item.getDiscountApplied() * item.getQuantity() * item.getProduct().getPrice());
+            }).sum();
             List<OrderItemResponse> itemResponses = items.stream().map(item -> {
                 OrderItemResponse itemResponse = new OrderItemResponse();
                 itemResponse.setId(item.getId());
@@ -128,7 +138,7 @@ public class OrdersController {
             }).toList();
             response.setId(order.getId());
             response.setUserId(order.getUser().getId());
-            response.setTotal(order.getTotal());
+            response.setTotal(total);
             response.setStatus(order.getStatus());
             response.setCreatedAt(order.getCreatedAt());
             response.setItems(itemResponses);
