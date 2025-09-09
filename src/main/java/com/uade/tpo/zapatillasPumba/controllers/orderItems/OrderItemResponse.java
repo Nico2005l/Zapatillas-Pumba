@@ -11,8 +11,8 @@ public class OrderItemResponse {
     private Double unitPrice;
     private Double discountApplied;
     private Integer quantity;
-    final Double subTotal = (unitPrice * quantity) ;
-    final Double total = subTotal - (discountApplied * subTotal);
-    
+
+    private Double subTotal;
+    private Double total;
 }
 

@@ -47,6 +47,8 @@ public class OrderItemsController {
         createdOrderItem.setUnitPrice(orderItem.getUnitPrice());
         createdOrderItem.setDiscountApplied(orderItem.getDiscountApplied());
         createdOrderItem.setQuantity(orderItem.getQuantity());
+        createdOrderItem.setSubTotal(orderItem.getUnitPrice() * orderItem.getQuantity());
+        createdOrderItem.setTotal(createdOrderItem.getSubTotal() - (orderItem.getDiscountApplied() * createdOrderItem.getSubTotal()));
 
         return createdOrderItem;
     }
