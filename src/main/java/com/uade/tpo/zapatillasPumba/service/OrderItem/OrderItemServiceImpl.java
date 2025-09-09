@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
@@ -54,9 +55,9 @@ public class OrderItemServiceImpl implements OrderItemService {
         }
         OrderItem orderItem = new OrderItem();
 
-        Discount discount = discountRepository.findByProductId(product.getId()).get(0);
-        
-        orderItem.setDiscountApplied(discount.getValue());
+        Optional<Discount> discount = discountRepository.findByProductId(product.getId()).stream().findFirst();
+
+        orderItem.setDiscountApplied(discount.map(Discount::getValue).orElse(0.0));
         orderItem.setOrder(order);
         orderItem.setProduct(product);
         orderItem.setUnitPrice(orderItemRequest.getUnitPrice());
