@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
         newOrder.setUser(user);
         newOrder.setStatus(order.getStatus());
         newOrder.setCreatedAt(java.time.LocalDate.now());
-        newOrder.setTotal(order.getTotal());
+        newOrder.setTotal(0.0);
         return Optional.of(orderRepository.save(newOrder));
     }
 
