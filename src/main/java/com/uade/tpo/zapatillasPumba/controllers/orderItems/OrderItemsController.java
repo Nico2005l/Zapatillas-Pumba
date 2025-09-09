@@ -18,22 +18,7 @@ public class OrderItemsController {
     @Autowired
     private OrderItemService orderItemService;
 
-    @GetMapping
-    public List<OrderItemResponse> getOrderItemsByOrderId(@RequestParam Long orderId) {
-
-       List<OrderItemResponse> orderItemResponses = new ArrayList<>();
-       for (OrderItem item : orderItemService.getOrderItemsByOrderId(orderId)) {
-           OrderItemResponse response = new OrderItemResponse();
-           response.setId(item.getId());
-           response.setOrderId(item.getOrder().getId());
-           response.setProductId(item.getProduct().getId());
-           response.setUnitPrice(item.getProduct().getPrice());
-           response.setDiscountApplied(item.getDiscountApplied());
-           response.setQuantity(item.getQuantity());
-           orderItemResponses.add(response);
-       }
-        return orderItemResponses;
-    }
+    
 
     @PostMapping
     public OrderItemResponse createOrderItem(@RequestBody OrderItemRequest orderItemRequest) {
