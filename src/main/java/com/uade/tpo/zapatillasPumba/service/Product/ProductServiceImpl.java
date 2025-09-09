@@ -24,13 +24,10 @@ public class ProductServiceImpl implements ProductService {
     private com.uade.tpo.zapatillasPumba.repository.CategoryRepository categoryRepository;
 
     @Override
-    public List<Product> getProducts(Long categoryId, Long sellerId, Boolean isVisible) {
+    public List<Product> getProducts(Long categoryId, Boolean isVisible) {
         List<Product> products = productRepository.findAll();
         if (categoryId != null) {
             products = products.stream().filter(p -> p.getCategory() != null && p.getCategory().getId().equals(categoryId)).toList();
-        }
-        if (sellerId != null) {
-            products = products.stream().filter(p -> p.getSeller() != null && p.getSeller().getId().equals(sellerId)).toList();
         }
         if (isVisible != null) {
             products = products.stream().filter(p -> p.getIsVisible().equals(isVisible)).toList();

@@ -4,11 +4,9 @@ import com.uade.tpo.zapatillasPumba.controllers.orderItems.OrderItemRequest;
 import com.uade.tpo.zapatillasPumba.entity.Order;
 import com.uade.tpo.zapatillasPumba.entity.OrderItem;
 import com.uade.tpo.zapatillasPumba.entity.Product;
-import com.uade.tpo.zapatillasPumba.entity.User;
 import com.uade.tpo.zapatillasPumba.repository.OrderItemRepository;
 import com.uade.tpo.zapatillasPumba.repository.OrderRepository;
 import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
-import com.uade.tpo.zapatillasPumba.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +24,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Override
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
@@ -50,14 +45,9 @@ public class OrderItemServiceImpl implements OrderItemService {
             product.setStock(product.getStock() - orderItemRequest.getQuantity());
             productRepository.save(product);
         }
-        User seller = userRepository.findById(orderItemRequest.getSellerId()).orElse(null);
-        if (seller == null) {
-            throw new IllegalArgumentException("Invalid seller ID");
-        }
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setProduct(product);
-        orderItem.setSeller(seller);
         orderItem.setUnitPrice(orderItemRequest.getUnitPrice());
         orderItem.setDiscountApplied(orderItemRequest.getDiscountApplied());
         orderItem.setQuantity(orderItemRequest.getQuantity());
