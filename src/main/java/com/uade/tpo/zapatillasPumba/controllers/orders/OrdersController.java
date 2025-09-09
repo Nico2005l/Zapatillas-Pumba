@@ -41,6 +41,8 @@ public class OrdersController {
                 itemResponse.setUnitPrice(item.getProduct().getPrice());
                 itemResponse.setDiscountApplied(item.getDiscountApplied());
                 itemResponse.setQuantity(item.getQuantity());
+                itemResponse.setSubTotal(itemResponse.getUnitPrice() * itemResponse.getQuantity());
+                itemResponse.setTotal(itemResponse.getSubTotal() - (itemResponse.getDiscountApplied() * itemResponse.getSubTotal()));
                 return itemResponse;
             }).toList();
             response.setId(order.getId());
@@ -64,11 +66,26 @@ public class OrdersController {
         OrderResponse response = new OrderResponse();
         if (order.isPresent()) {
             Order foundOrder = order.get();
+            List<OrderItem> items = foundOrder.getItems();
+            List<OrderItemResponse> itemResponses = items.stream().map(item -> {
+                OrderItemResponse itemResponse = new OrderItemResponse();
+                itemResponse.setId(item.getId());
+                itemResponse.setOrderId(item.getOrder().getId());
+                itemResponse.setProductId(item.getProduct().getId());
+                itemResponse.setUnitPrice(item.getProduct().getPrice());
+                itemResponse.setDiscountApplied(item.getDiscountApplied());
+                itemResponse.setQuantity(item.getQuantity());
+                itemResponse.setSubTotal(itemResponse.getUnitPrice() * itemResponse.getQuantity());
+                itemResponse.setTotal(itemResponse.getSubTotal() - (itemResponse.getDiscountApplied() * itemResponse.getSubTotal()));
+                return itemResponse;
+            }).toList();
+            response.setItems(itemResponses);
             response.setId(foundOrder.getId());
             response.setUserId(foundOrder.getUser().getId());
             response.setTotal(foundOrder.getTotal());
             response.setStatus(foundOrder.getStatus());
             response.setCreatedAt(foundOrder.getCreatedAt());
+
             // Aquí deberías mapear los items si es necesario
         }
         return Optional.of(response);
@@ -105,6 +122,8 @@ public class OrdersController {
                 itemResponse.setUnitPrice(item.getProduct().getPrice());
                 itemResponse.setDiscountApplied(item.getDiscountApplied());
                 itemResponse.setQuantity(item.getQuantity());
+                itemResponse.setSubTotal(itemResponse.getUnitPrice() * itemResponse.getQuantity());
+                itemResponse.setTotal(itemResponse.getSubTotal() - (itemResponse.getDiscountApplied() * itemResponse.getSubTotal()));
                 return itemResponse;
             }).toList();
             response.setId(order.getId());
@@ -112,6 +131,7 @@ public class OrdersController {
             response.setTotal(order.getTotal());
             response.setStatus(order.getStatus());
             response.setCreatedAt(order.getCreatedAt());
+            response.setItems(itemResponses);
             // Aquí deberías mapear los items si es necesario
             return response;
         }).toList();
