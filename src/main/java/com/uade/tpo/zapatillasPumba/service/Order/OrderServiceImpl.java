@@ -79,4 +79,14 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = getOrderByUserId(userId);
         return orderMapper.toDtoList(orders);
     }
+
+    @Override
+    public String deleteOrder(Long id) {
+        if (orderRepository.existsById(id)) {
+            orderRepository.deleteById(id);
+            return "Orden eliminada correctamente";
+        } else {
+            return "Orden no encontrada";
+        }
+    }
 }

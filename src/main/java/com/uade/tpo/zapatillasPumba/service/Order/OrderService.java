@@ -14,6 +14,7 @@ public interface OrderService {
     List<Order> getAllOrders();
     Optional<Order> getOrderById(Long id);
     List<Order> getOrderByUserId(Long userId);
+    String deleteOrder(Long id);
     
     // DTO methods
     Optional<OrderResponse> createOrderResponse(OrderRequest order);

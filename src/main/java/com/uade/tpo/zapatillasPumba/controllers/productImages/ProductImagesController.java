@@ -53,14 +53,14 @@ public class ProductImagesController {
     }
 
     @DeleteMapping("/{imageId}")
-    public ResponseEntity<Void> deleteProductImage(@PathVariable Long productId, @PathVariable Long imageId) {
+    public ResponseEntity<String> deleteProductImage(@PathVariable Long productId, @PathVariable Long imageId) {
         // Verificar que la imagen pertenece al producto solicitado
         if (!productImageService.imageExistsForProduct(productId, imageId)) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body("Imagen no encontrada para el producto");
         }
         
         productImageService.deleteProductImage(imageId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Imagen eliminada correctamente");
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

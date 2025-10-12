@@ -14,4 +14,6 @@ public interface OrderItemService {
     // New methods for returning DTOs directly
     List<OrderItemResponse> getOrderItemResponsesByOrderId(Long orderId);
     OrderItemResponse createOrderItemResponse(OrderItemRequest orderItemRequest);
+    
+    String deleteOrderItem(Long id);
 }

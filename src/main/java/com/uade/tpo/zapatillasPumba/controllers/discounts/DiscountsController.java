@@ -56,9 +56,9 @@ public class DiscountsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDiscount(@PathVariable Long id) {
-        discountService.deleteDiscount(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteDiscount(@PathVariable Long id) {
+        String mensaje = discountService.deleteDiscount(id);
+        return ResponseEntity.ok(mensaje);
     }
 
     @PostMapping("/{id}/clone/{productId}")

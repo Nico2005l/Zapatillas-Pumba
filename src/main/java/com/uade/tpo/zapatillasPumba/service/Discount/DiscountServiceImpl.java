@@ -85,8 +85,9 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     @Transactional
-    public void deleteDiscount(Long id) {
+    public String deleteDiscount(Long id) {
         discountRepository.deleteById(id);
+        return "Descuento eliminado correctamente";
     }
 
 

@@ -36,5 +36,9 @@ public class OrdersController {
     public List<OrderResponse> getOrderByUser(@PathVariable Long userId) {
         return orderService.getOrderResponsesByUserId(userId);
     }
-}
     
+    @DeleteMapping("/{id}")
+    public String deleteOrder(@PathVariable Long id) {
+        return orderService.deleteOrder(id);
+    }
+}

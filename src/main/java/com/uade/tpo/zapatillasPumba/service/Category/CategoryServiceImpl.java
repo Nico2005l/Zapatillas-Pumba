@@ -79,14 +79,15 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    public void deleteCategory(Long id) {
+    public String deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
             .orElseThrow(CategoryNotFoundException::new);
         
         if (category.getProducts() != null && !category.getProducts().isEmpty()) { // Verificamos si la categoría tiene una lista de productos y si esta tiene productos asociados, si los tiene lanzamos una excepción
             throw new CategoryHasProductsException();
         }
-        
+
         categoryRepository.delete(category);
+        return "Categoría eliminada correctamente";
     }
 }

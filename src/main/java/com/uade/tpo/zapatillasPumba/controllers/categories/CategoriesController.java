@@ -72,12 +72,12 @@ public class CategoriesController {
 
     /* Primer endpoint que hace un DELETE, osea borra una categoria
      * Se hace un DELETE a /categories/{categoryId}
-     * Devuelve un ResponseEntity indicando un 204 No Content (el .noContent indica un 204)
+     * Devuelve un ResponseEntity con un mensaje y el estado 200 OK
      */
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
-        categoryService.deleteCategory(categoryId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) {
+        String mensaje = categoryService.deleteCategory(categoryId);
+        return ResponseEntity.ok(mensaje);
     }
 }
 

@@ -80,4 +80,14 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem createdItem = createOrderItem(orderItemRequest);
         return orderItemMapper.toDto(createdItem);
     }
+
+    @Override
+    public String deleteOrderItem(Long id) {
+        if (orderItemRepository.existsById(id)) {
+            orderItemRepository.deleteById(id);
+            return "Item eliminado correctamente";
+        } else {
+            return "Item no encontrado";
+        }
+    }
 }
