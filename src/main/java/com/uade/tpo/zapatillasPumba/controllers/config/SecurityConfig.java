@@ -50,9 +50,11 @@ public class SecurityConfig {
                                                 
                                                 // Cualquier otra ruta requiere autenticación
                                                 .anyRequest().authenticated())
+                                                
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                                
 
                 return http.build();
         }

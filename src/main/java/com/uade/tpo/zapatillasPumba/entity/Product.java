@@ -45,8 +45,4 @@ public class Product {
     @JsonManagedReference
     private List<ProductImage> productImages;
 
-    public void setDiscount(Discount discount) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDiscount'");
-    }
 }
