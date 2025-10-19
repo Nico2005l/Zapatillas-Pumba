@@ -42,6 +42,8 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.POST, "/orders/**", "/order-items/**").hasAuthority(Role.USER.name())
                                                 .requestMatchers(HttpMethod.GET, "/orders/**", "/order-items/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
 
+                                                .requestMatchers("/carts/**").permitAll()
+
                                                 // ADMIN tiene acceso a todo el resto (modificación de productos, categorías, imágenes)
                                                 .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.POST, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
