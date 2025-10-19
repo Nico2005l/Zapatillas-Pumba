@@ -38,4 +38,12 @@ public class PedidoController {
                 .map(pedidoMapper::toResponse)
                 .collect(Collectors.toList()));
     }
+
+    @GetMapping("/{pedidoId}/user/{userId}")
+    public ResponseEntity<PedidoResponse> getUserPedido(
+            @PathVariable Long userId,
+            @PathVariable Long pedidoId) {
+        Pedido pedido = pedidoService.getUserPedido(userId, pedidoId);
+        return ResponseEntity.ok(pedidoMapper.toResponse(pedido));
+    }
 }

@@ -10,4 +10,5 @@ public interface PedidoService {
     Pedido getPedidoByNumber(String pedidoNumber);
     List<Pedido> getUserPedidos(Long userId);
     Pedido updatePedidoStatus(Long id, PedidoStatus status);
+    Pedido getUserPedido(Long userId, Long pedidoId);
 }

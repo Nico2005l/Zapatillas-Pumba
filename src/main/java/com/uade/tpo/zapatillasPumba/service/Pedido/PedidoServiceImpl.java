@@ -8,6 +8,7 @@ import com.uade.tpo.zapatillasPumba.service.CartItem.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
 
 @Service
@@ -76,5 +77,14 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = getPedidoById(id);
         pedido.setStatus(status);
         return pedidoRepository.save(pedido);
+    }
+
+    @Override
+    public Pedido getUserPedido(Long userId, Long pedidoId) {
+        Pedido pedido = getPedidoById(pedidoId);
+        if (!pedido.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("User does not have access to this pedido");
+        }
+        return pedido;
     }
 }
