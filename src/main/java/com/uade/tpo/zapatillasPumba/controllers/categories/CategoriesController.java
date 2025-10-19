@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/categories")
@@ -24,18 +25,15 @@ public class CategoriesController {
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
-        Category category = categoryService.getCategoryById(categoryId);
-        return ResponseEntity.ok(category);
+        Optional<Category> category = categoryService.getCategoryById(categoryId);
+        return category.map(ResponseEntity::ok)
+                       .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
-        Category result = categoryService.createCategory(
-                categoryRequest.getSexo(), 
-                categoryRequest.getTipo(),
-                categoryRequest.getParentId()
-        );
+        Category result = categoryService.createCategory(categoryRequest);  
         return ResponseEntity.created(URI.create("/categories/" + result.getId())).body(result);
     }
 
@@ -43,11 +41,7 @@ public class CategoriesController {
     public ResponseEntity<Category> updateCategory(
             @PathVariable Long categoryId,
             @RequestBody CategoryRequest categoryRequest) {
-        Category updatedCategory = categoryService.updateCategory(
-                categoryId,
-                categoryRequest.getSexo(),
-                categoryRequest.getTipo()
-        );
+        Category updatedCategory = categoryService.updateCategory(categoryId, categoryRequest);
         return ResponseEntity.ok(updatedCategory);
     }
 

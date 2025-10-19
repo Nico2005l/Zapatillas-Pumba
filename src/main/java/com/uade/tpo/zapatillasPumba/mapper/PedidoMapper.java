@@ -12,8 +12,7 @@ public class PedidoMapper {
     public PedidoResponse toResponse(Pedido pedido) {
         PedidoResponse response = new PedidoResponse();
         response.setId(pedido.getId());
-        response.setPedidoNumber(pedido.getPedidoNumber());
-        response.setStatus(pedido.getStatus().getDisplayName());
+        response.setStatus(pedido.getStatus());
         response.setCreatedAt(pedido.getCreatedAt());
         response.setTotalAmount(pedido.getTotalAmount());
         response.setItems(pedido.getItems().stream()

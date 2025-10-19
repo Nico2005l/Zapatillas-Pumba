@@ -1,5 +1,6 @@
 package com.uade.tpo.zapatillasPumba.service.Category;
 
+import com.uade.tpo.zapatillasPumba.controllers.categories.CategoryRequest;
 import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryHasProductsException;
@@ -8,6 +9,7 @@ import com.uade.tpo.zapatillasPumba.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 /* Aca les dejo la implementacion del servicio de categorias
  * como dije en el controlador, intentemos hacer el resto parecido a esto en lo posible
@@ -40,21 +42,20 @@ public class CategoryServiceImpl implements CategoryService {
      * Este metodo obtiene una categoria por su id
      * Si no la encuentra, lanza una excepcion CategoryNotFoundException
      */
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
-            .orElseThrow(CategoryNotFoundException::new);
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
     }
 
-    public Category createCategory(String name, Long parentId) throws CategoryDuplicateException { // Si ya existe una categoria con ese nombre, lanza una excepcion CategoryDuplicateException
-        if (categoryRepository.findByName(name).isPresent()) {
+    public Category createCategory(CategoryRequest categoryRequest) throws CategoryDuplicateException { // Si ya existe una categoria con ese nombre, lanza una excepcion CategoryDuplicateException
+        if (categoryRepository.findByNombre(categoryRequest.getNombre()).size() > 0) {
             throw new CategoryDuplicateException();
         }
         
         Category category = new Category(); // Creamos una nueva categoria y le seteamos sus atributos
-        category.setName(name);
-        
-        if (parentId != null) { // si el parent id no es nulo, buscamos la categoria padre y se la seteamos
-            Category parent = categoryRepository.findById(parentId) // si no existe la categoria padre, lanza una excepcion CategoryNotFoundException
+        category.setNombre(categoryRequest.getNombre());
+
+        if (categoryRequest.getParentId() != null) { // si el parent id no es nulo, buscamos la categoria padre y se la seteamos
+            Category parent = categoryRepository.findById(categoryRequest.getParentId()) // si no existe la categoria padre, lanza una excepcion CategoryNotFoundException
                 .orElseThrow(CategoryNotFoundException::new);
             category.setParent(parent);
         }
@@ -62,14 +63,14 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
-    public Category updateCategory(Long id, String name, Long parentId) { // es exactamente igual a createCategory, pero primero busca la categoria a modificar por ID
+    public Category updateCategory(Long id, CategoryRequest categoryRequest) { // es exactamente igual a createCategory, pero primero busca la categoria a modificar por ID
         Category category = categoryRepository.findById(id)
             .orElseThrow(CategoryNotFoundException::new);
-        
-        category.setName(name);
-        
-        if (parentId != null) {
-            Category parent = categoryRepository.findById(parentId)
+
+        category.setNombre(categoryRequest.getNombre());
+
+        if (categoryRequest.getParentId() != null) {
+            Category parent = categoryRepository.findById(categoryRequest.getParentId())
                 .orElseThrow(CategoryNotFoundException::new);
             category.setParent(parent);
         } else {

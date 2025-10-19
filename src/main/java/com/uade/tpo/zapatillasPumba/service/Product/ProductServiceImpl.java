@@ -38,14 +38,8 @@ public class ProductServiceImpl implements ProductService {
 
     public Product createProduct(ProductRequest productRequest) {
         validateProductData(productRequest);
-        
-        log.debug("Creating product for category ID: {}", productRequest.getCategoryId());
-        
-        // Get the category and validate it exists
-        Category category = categoryService.getCategoryById(productRequest.getCategoryId());
-        if (category.getTipo() == null) {
-            throw new InvalidProductDataException("Los productos solo pueden asociarse a categorías de tipo, no de género");
-        }
+        Category category = categoryService.getCategoryById(productRequest.getCategoryId())
+                .orElseThrow(() -> new InvalidProductDataException("Categoría no encontrada"));
 
         Product product = new Product();
         product.setTitle(productRequest.getTitle());
@@ -54,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productRequest.getPrice());
         product.setStock(productRequest.getStock());
         product.setIsVisible(productRequest.getIsVisible());
-        product.setTalle(productRequest.getTalle());
+        product.setSize(productRequest.getSize());
         product.setColor(productRequest.getColor());
         product.setCreatedAt(java.time.LocalDate.now());
         
@@ -67,9 +61,7 @@ public class ProductServiceImpl implements ProductService {
         }
         category.getProducts().add(product);
 
-        log.debug("Saving product with category: {}", category.getId());
         Product savedProduct = productRepository.save(product);
-        log.debug("Saved product. Category has {} products", category.getProducts().size());
         
         return savedProduct;
     }
@@ -99,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setPrice(request.getPrice());
         existingProduct.setStock(request.getStock());
         existingProduct.setIsVisible(request.getIsVisible());
-        existingProduct.setTalle(request.getTalle());
+        existingProduct.setSize(request.getSize());
         existingProduct.setColor(request.getColor());
 
         return productRepository.save(existingProduct);
@@ -127,9 +119,9 @@ public class ProductServiceImpl implements ProductService {
         if (request.getDescripcionCorta() == null || request.getDescripcionCorta().trim().isEmpty()) {
             throw new InvalidProductDataException("La descripción corta no puede estar vacía");
         }
-        
-        if (request.getTalle() == null) {
-            throw new InvalidProductDataException("El talle es obligatorio");
+
+        if (request.getSize() == null) {
+            throw new InvalidProductDataException("El tamaño es obligatorio");
         }
         
         if (request.getColor() == null) {

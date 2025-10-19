@@ -32,19 +32,20 @@ public class Product {
     @Column
     private Integer stock;
 
+    @Column
+    private Integer size ;
+
+    @Column
+    private String color;
+
+    @Column
+    private String genre;
+
     @Column(name = "is_visible")
     private Boolean isVisible;
 
     @Column(name = "created_at")
     private LocalDate createdAt;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "talle")
-    private TalleEnum talle;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "color")
-    private ColorEnum color;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)

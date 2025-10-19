@@ -73,7 +73,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     @Transactional
-    public Pedido updatePedidoStatus(Long id, PedidoStatus status) {
+    public Pedido updatePedidoStatus(Long id, String status) {
         Pedido pedido = getPedidoById(id);
         pedido.setStatus(status);
         return pedidoRepository.save(pedido);

@@ -1,7 +1,6 @@
 package com.uade.tpo.zapatillasPumba.controllers.pedidos;
 
 import com.uade.tpo.zapatillasPumba.entity.Pedido;
-import com.uade.tpo.zapatillasPumba.entity.PedidoStatus;
 import com.uade.tpo.zapatillasPumba.service.Pedido.PedidoService;
 import com.uade.tpo.zapatillasPumba.mapper.PedidoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
