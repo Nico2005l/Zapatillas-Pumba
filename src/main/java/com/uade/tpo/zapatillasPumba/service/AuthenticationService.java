@@ -56,6 +56,8 @@ public class AuthenticationService {
         public AuthenticationResponse authenticate(AuthenticationRequest request) {
                 var user = repository.findByEmail(request.getEmail()) // buscamos el usuario por email para poder tener sus datos
                                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+                user.setRole(Role.USER);
                 
                 // al tener los lados, autenticamos el usuario con el AuthenticationManager
                 authenticationManager.authenticate(
@@ -64,6 +66,7 @@ public class AuthenticationService {
                                                 request.getPassword()));
 
                 // Si llegó hasta acá, es porque el username y password son correctos
+                
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)

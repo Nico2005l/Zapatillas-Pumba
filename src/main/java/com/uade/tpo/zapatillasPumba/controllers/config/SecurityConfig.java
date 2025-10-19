@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
                                                 // Rutas públicas para todos (autenticación y errores)
-                                                .requestMatchers("/api/v1/auth/**", "/error/**").permitAll()
+                                                .requestMatchers("/auth/**", "/error/**").permitAll()
                                                 
                                                 // GUEST puede ver productos, categorías e imágenes
                                                 .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/productImages/**").permitAll()
