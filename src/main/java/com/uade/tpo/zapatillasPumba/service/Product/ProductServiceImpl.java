@@ -92,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException();
         }
         productRepository.deleteById(productId);
+        
     }
     
     private void validateProductData(ProductRequest request) { // Este metodo valida los datos del producto para que no sean invalidos

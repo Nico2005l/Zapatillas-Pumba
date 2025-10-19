@@ -1,13 +1,17 @@
 package com.uade.tpo.zapatillasPumba.service.Category;
 
 import com.uade.tpo.zapatillasPumba.entity.Category;
+import com.uade.tpo.zapatillasPumba.entity.SexoCategory;
+import com.uade.tpo.zapatillasPumba.entity.TipoCategory;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryDuplicateException;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryHasProductsException;
 import com.uade.tpo.zapatillasPumba.exceptions.CategoryNotFoundException;
+import com.uade.tpo.zapatillasPumba.exceptions.InvalidCategoryParentException;
 import com.uade.tpo.zapatillasPumba.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 /* Aca les dejo la implementacion del servicio de categorias
  * como dije en el controlador, intentemos hacer el resto parecido a esto en lo posible
@@ -26,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getCategories() {
         List<Category> categories = categoryRepository.findAll(); // Obtenemos todas las categorias de la base de datos
         categories.removeIf(category -> category.getParent() != null); // Sacamos las que tienen padre, osea nos quedamos solo con las categorias raiz
-        for (Category parent : categories) { // Por cada categoria raiz, le seteamos sus hijos
+        for (Category parent : categories) { // Por
             parent.setChildren(
                 categoryRepository.findAll().stream() // Recorremos todas las categorias de nuevo y le filtramos las que tienen como padre a la categoria raiz actual
                     .filter(child -> child.getParent() != null && child.getParent().getId().equals(parent.getId()))
@@ -42,51 +46,134 @@ public class CategoryServiceImpl implements CategoryService {
      */
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-            .orElseThrow(CategoryNotFoundException::new);
+            .orElseThrow(() -> new CategoryNotFoundException("Categoría con id " + id + " no encontrada"));
     }
 
-    public Category createCategory(String name, Long parentId) throws CategoryDuplicateException { // Si ya existe una categoria con ese nombre, lanza una excepcion CategoryDuplicateException
-        if (categoryRepository.findByName(name).isPresent()) {
-            throw new CategoryDuplicateException();
+    @Override
+    public Category createCategory(SexoCategory sexo, TipoCategory tipo) {
+        // Validate that only one field is provided
+        if ((sexo == null && tipo == null) || (sexo != null && tipo != null)) {
+            throw new IllegalArgumentException("Debe especificar exactamente uno: sexo O tipo");
         }
-        
-        Category category = new Category(); // Creamos una nueva categoria y le seteamos sus atributos
-        category.setName(name);
-        
-        if (parentId != null) { // si el parent id no es nulo, buscamos la categoria padre y se la seteamos
-            Category parent = categoryRepository.findById(parentId) // si no existe la categoria padre, lanza una excepcion CategoryNotFoundException
-                .orElseThrow(CategoryNotFoundException::new);
-            category.setParent(parent);
+
+        // Check for duplicates - gender categories must be root
+        if (sexo != null && categoryRepository.existsBySexoAndParentIsNull(sexo)) {
+            throw new CategoryDuplicateException(
+                String.format("Ya existe una categoría raíz con el género %s", sexo.getDisplayName())
+            );
         }
-        
+
+        // Type categories cannot be created without a parent
+        if (tipo != null) {
+            throw new InvalidCategoryParentException(
+                "Las categorías de tipo deben tener una categoría padre de género"
+            );
+        }
+
+        Category category = new Category(sexo, tipo);
         return categoryRepository.save(category);
     }
 
-    public Category updateCategory(Long id, String name, Long parentId) { // es exactamente igual a createCategory, pero primero busca la categoria a modificar por ID
-        Category category = categoryRepository.findById(id)
-            .orElseThrow(CategoryNotFoundException::new);
-        
-        category.setName(name);
-        
-        if (parentId != null) {
-            Category parent = categoryRepository.findById(parentId)
-                .orElseThrow(CategoryNotFoundException::new);
-            category.setParent(parent);
-        } else {
-            category.setParent(null);
+    @Override
+    public Category createCategory(SexoCategory sexo, TipoCategory tipo, Long parentId) {
+        // Validate inputs
+        if ((sexo == null && tipo == null) || (sexo != null && tipo != null)) {
+            throw new IllegalArgumentException("Debe especificar exactamente uno: sexo O tipo");
         }
-        
-        return categoryRepository.save(category);
+
+        // Check for duplicates
+        if (sexo != null) {
+            // Check duplicate gender category (must be root)
+            if (categoryRepository.existsBySexoAndParentIsNull(sexo)) {
+                throw new CategoryDuplicateException(
+                    String.format("Ya existe una categoría raíz con el género %s", sexo.getDisplayName())
+                );
+            }
+        }
+
+        if (tipo != null) {
+            if (parentId == null) {
+                throw new InvalidCategoryParentException("Las categorías de tipo deben tener una categoría padre de género");
+            }
+            // Check duplicate type under specific parent
+            if (categoryRepository.existsByTipoAndParentId(tipo, parentId)) {
+                throw new CategoryDuplicateException(
+                    String.format("Ya existe la categoría tipo %s bajo el padre especificado", tipo.getDisplayName())
+                );
+            }
+            
+            Category parent = getCategoryById(parentId);
+            if (parent.getSexo() == null) {
+                throw new InvalidCategoryParentException("La categoría padre debe ser de tipo género");
+            }
+            
+            Category category = new Category(sexo, tipo);
+            category.setParent(parent);
+            return categoryRepository.save(category);
+        }
+
+        return categoryRepository.save(new Category(sexo, tipo));
     }
 
-    public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id)
-            .orElseThrow(CategoryNotFoundException::new);
+    public Category updateCategory(Long categoryId, SexoCategory sexo, TipoCategory tipo) {
+        Category existingCategory = getCategoryById(categoryId);
+
+        // Validate that only one field is provided
+        if ((sexo == null && tipo == null) || (sexo != null && tipo != null)) {
+            throw new IllegalArgumentException("Debe especificar exactamente uno: sexo O tipo");
+        }
+
+        // Check if trying to convert gender to type
+        if (existingCategory.getSexo() != null && tipo != null) {
+            if (!existingCategory.getChildren().isEmpty()) {
+                throw new InvalidCategoryParentException(
+                    "No se puede convertir una categoría padre en subcategoría mientras tenga subcategorías"
+                );
+            }
+        }
+
+        // Check if trying to convert type to gender
+        if (existingCategory.getTipo() != null && sexo != null) {
+            if (!existingCategory.getProducts().isEmpty()) {
+                throw new InvalidCategoryParentException(
+                    "No se puede convertir una subcategoría en categoría padre mientras tenga productos"
+                );
+            }
+        }
+
+        // Check for duplicates if changing to another gender
+        if (sexo != null && !sexo.equals(existingCategory.getSexo())) {
+            if (categoryRepository.existsBySexoAndParentIsNull(sexo)) {
+                throw new CategoryDuplicateException(
+                    String.format("Ya existe una categoría raíz con el género %s", sexo.getDisplayName())
+                );
+            }
+        }
+
+        // Check for duplicates if changing to another type under same parent
+        if (tipo != null && !tipo.equals(existingCategory.getTipo())) {
+            if (categoryRepository.existsByTipoAndParentId(tipo, existingCategory.getParent().getId())) {
+                throw new CategoryDuplicateException(
+                    String.format("Ya existe una categoría tipo %s bajo el mismo padre", tipo.getDisplayName())
+                );
+            }
+        }
+
+        existingCategory.setSexo(sexo);
+        existingCategory.setTipo(tipo);
+
+        return categoryRepository.save(existingCategory);
+    }
+
+    @Override
+    public String deleteCategory(Long id) {
+        Category category = getCategoryById(id);
         
-        if (category.getProducts() != null && !category.getProducts().isEmpty()) { // Verificamos si la categoría tiene una lista de productos y si esta tiene productos asociados, si los tiene lanzamos una excepción
-            throw new CategoryHasProductsException();
+        if (category.getProducts() != null && !category.getProducts().isEmpty()) {
+            throw new CategoryHasProductsException("No se puede eliminar la categoría porque tiene productos asociados");
         }
         
         categoryRepository.delete(category);
+        return "Categoría eliminada correctamente";
     }
 }

@@ -38,8 +38,11 @@ public class Product {
     // Relación con categoría (muchos productos pueden tener una categoría)
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonBackReference("category-products")  // Detiene recursión a la categoría
-    private Category category;
+    private Category category;    // This will be the gender category
+
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id")
+    private Category subcategory; // This will be the type category
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
