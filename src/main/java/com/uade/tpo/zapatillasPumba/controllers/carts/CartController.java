@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.stream.Collectors;
-import java.util.Optional;
-import com.uade.tpo.zapatillasPumba.repository.DiscountRepository;
 import com.uade.tpo.zapatillasPumba.service.CartItem.CartItemService;
 
 
@@ -23,9 +21,6 @@ public class CartController {
     
     @Autowired
     private CartItemService cartItemService;
-
-    @Autowired
-    private DiscountRepository discountRepository;  // Add this
 
     @GetMapping("/{id}")
     public ResponseEntity<CartResponse> getCart(@PathVariable Long id) {
@@ -49,12 +44,9 @@ public class CartController {
     private CartResponse toCartResponse(Cart cart) {
         CartResponse response = new CartResponse();
         response.setId(cart.getId());
-        
-        CartResponse.UserInfo userInfo = new CartResponse.UserInfo();
-        userInfo.setId(cart.getUser().getId());
-        userInfo.setUsername(cart.getUser().getUsername());
-        response.setUser(userInfo);
-        
+
+        response.setUserId(cart.getUser().getId());
+
         response.setItems(cart.getCartItems().stream()
             .map(this::toCartItemResponse)
             .collect(Collectors.toList()));

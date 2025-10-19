@@ -8,14 +8,10 @@ import java.util.List;
 @Data
 public class CartResponse {
     private Long id;
-    private UserInfo user;
+    private Long userId;
     private List<CartItemResponse> items;
     private LocalDateTime createdAt;
     private Double total;
 
-    @Data
-    public static class UserInfo {
-        private Long id;
-        private String username;
-    }
+    
 }
