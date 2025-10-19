@@ -1,7 +1,7 @@
 package com.uade.tpo.zapatillasPumba.controllers.common;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor
