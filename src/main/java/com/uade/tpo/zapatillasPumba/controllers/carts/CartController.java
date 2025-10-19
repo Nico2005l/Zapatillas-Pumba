@@ -38,6 +38,12 @@ public class CartController {
         return ResponseEntity.created(URI.create("/carts/" + cart.getId())).body(response);
     }
 
+    @DeleteMapping("/{cartId}")
+    public ResponseEntity<DeleteResponse> deleteCart(@PathVariable Long cartId) {
+        cartService.deleteCart(cartId);
+        return ResponseEntity.ok(new DeleteResponse("El carrito se ha borrado correctamente"));
+    }
+
     private CartResponse toCartResponse(Cart cart) {
         CartResponse response = new CartResponse();
         response.setId(cart.getId());

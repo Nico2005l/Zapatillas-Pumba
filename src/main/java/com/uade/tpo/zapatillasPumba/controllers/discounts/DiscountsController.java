@@ -1,5 +1,6 @@
 package com.uade.tpo.zapatillasPumba.controllers.discounts;
 
+import com.uade.tpo.zapatillasPumba.controllers.common.DeleteResponse;
 import com.uade.tpo.zapatillasPumba.entity.Discount;
 import com.uade.tpo.zapatillasPumba.exceptions.DiscountProductNotFoundException;
 import com.uade.tpo.zapatillasPumba.service.Discount.DiscountService;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.uade.tpo.zapatillasPumba.controllers.common.DeleteResponse;
 
 import java.net.URI;
 import java.util.List;
@@ -56,9 +58,9 @@ public class DiscountsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDiscount(@PathVariable Long id) {
-        discountService.deleteDiscount(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<DeleteResponse> deleteDiscount(@PathVariable Long discountId) {
+        discountService.deleteDiscount(discountId);
+        return ResponseEntity.ok(new DeleteResponse("El descuento se ha borrado correctamente"));
     }
 
     @PostMapping("/{id}/clone/{productId}")
