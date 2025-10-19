@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.zapatillasPumba.entity.Role;
 import com.uade.tpo.zapatillasPumba.service.AuthenticationService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request) {
+                request.setRole(Role.USER);
         return ResponseEntity.ok(service.register(request));
     }
 
@@ -42,6 +44,8 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request) {
+
+                
         return ResponseEntity.ok(service.authenticate(request));
     }
 }

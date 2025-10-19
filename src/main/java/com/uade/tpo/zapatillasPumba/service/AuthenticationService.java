@@ -9,6 +9,7 @@ import com.uade.tpo.zapatillasPumba.controllers.auth.AuthenticationRequest;
 import com.uade.tpo.zapatillasPumba.controllers.auth.AuthenticationResponse;
 import com.uade.tpo.zapatillasPumba.controllers.auth.RegisterRequest;
 import com.uade.tpo.zapatillasPumba.controllers.config.JwtService;
+import com.uade.tpo.zapatillasPumba.entity.Role;
 import com.uade.tpo.zapatillasPumba.entity.User;
 import com.uade.tpo.zapatillasPumba.repository.UserRepository;
 
@@ -34,7 +35,7 @@ public class AuthenticationService {
                                 .email(request.getEmail())
                                 .username(request.getUsername())
                                 .password(passwordEncoder.encode(request.getPassword())) // Aca es donde encriptamoos la contraseña
-                                .role(request.getRole()) // Por defecto, el usuario se registra con rol USER
+                                .role(Role.USER) // Por defecto, el usuario se registra con rol USER
                                 .isActive(true)
                                 .createdAt(java.time.LocalDateTime.now())
                                 .build();
