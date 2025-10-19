@@ -43,7 +43,7 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.GET, "/orders/**", "/order-items/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
 
                                                 // ADMIN tiene acceso a todo el resto (modificación de productos, categorías, imágenes)
-                                                .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.POST, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.PUT, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.DELETE,"/users/**", "/categories/**", "/products/**", "/productImages/**", "/discounts/**", "/orders/**", "/order-items/**").hasAuthority(Role.ADMIN.name())
