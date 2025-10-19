@@ -35,11 +35,7 @@ public class AuthenticationService {
                                 .email(request.getEmail())
                                 .username(request.getUsername())
                                 .password(passwordEncoder.encode(request.getPassword())) // Aca es donde encriptamoos la contraseña
-<<<<<<< HEAD
-                                .role(Role.USER) // Por defecto, el usuario se registra con rol USER
-=======
                                 .role(request.getRole())
->>>>>>> parent of 4ca225f (cambios admin)
                                 .isActive(true)
                                 .createdAt(java.time.LocalDateTime.now())
                                 .build();
