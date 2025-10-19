@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 /* Con estas anotaciones le indicamos a Spring que esta clase es un controlador REST y que manejara las solicitudes en la ruta /api/v1/auth */
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 
 /* Esta anotacion es lo que nos permite aplicar la inyeccion de dependencias */
 @RequiredArgsConstructor

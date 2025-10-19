@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.zapatillasPumba.controllers.users.UserResponse;
 import com.uade.tpo.zapatillasPumba.entity.User;
 import com.uade.tpo.zapatillasPumba.repository.UserRepository;
 
@@ -23,8 +24,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+            .map(user -> {
+                UserResponse resp = new UserResponse();
+                resp.setFirstName(user.getFirstName());
+                resp.setLastName(user.getLastName());
+                resp.setEmail(user.getEmail());
+                resp.setUsername(user.getUsername());
+                return resp;
+            })
+            .toList();
     }
 
     @Override

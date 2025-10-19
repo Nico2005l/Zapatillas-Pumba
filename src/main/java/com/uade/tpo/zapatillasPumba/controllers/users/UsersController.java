@@ -8,6 +8,7 @@ import java.util.List;
 import com.uade.tpo.zapatillasPumba.entity.User;
 import com.uade.tpo.zapatillasPumba.service.User.UserService;
 
+
 @RestController
 @RequestMapping("users")
 public class UsersController {
@@ -16,8 +17,10 @@ public class UsersController {
 	private UserService userService;
 
 	@GetMapping
-	public ResponseEntity<List<User>> getUsers() {
-		List<User> users = userService.getAllUsers();
+	public ResponseEntity<List<UserResponse>> getUsers() {
+		List<UserResponse> users = userService.getAllUsers();
+		
+
 		return ResponseEntity.ok(users);
 	}
 
