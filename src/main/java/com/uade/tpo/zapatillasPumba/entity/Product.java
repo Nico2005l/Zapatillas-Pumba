@@ -17,11 +17,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String title;
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String descripcionCorta;
+
+    @Column(columnDefinition = "TEXT")
+    private String descripcionLarga;  // renamed from description
 
     @Column
     private Double price;
@@ -35,14 +38,18 @@ public class Product {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
-    // Relación con categoría (muchos productos pueden tener una categoría)
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;    // This will be the gender category
+    @Enumerated(EnumType.STRING)
+    @Column(name = "talle")
+    private TalleEnum talle;
 
-    @ManyToOne
-    @JoinColumn(name = "subcategory_id")
-    private Category subcategory; // This will be the type category
+    @Enumerated(EnumType.STRING)
+    @Column(name = "color")
+    private ColorEnum color;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    @JsonBackReference("category-products")
+    private Category category;  // This should only reference type categories (subcategories)
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

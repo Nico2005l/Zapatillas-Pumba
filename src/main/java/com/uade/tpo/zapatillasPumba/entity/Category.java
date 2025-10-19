@@ -47,7 +47,7 @@ public class Category {
     private List<Category> children = new ArrayList<>();
 
     // Relación uno a muchos con productos
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("category-products")
     private List<Product> products = new ArrayList<>();
 
