@@ -61,12 +61,6 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Pedido getPedidoByNumber(String pedidoNumber) {
-        return pedidoRepository.findByPedidoNumber(pedidoNumber)
-            .orElseThrow(() -> new PedidoNotFoundException("Pedido not found with number: " + pedidoNumber));
-    }
-
-    @Override
     public List<Pedido> getUserPedidos(Long userId) {
         return pedidoRepository.findByUserId(userId);
     }

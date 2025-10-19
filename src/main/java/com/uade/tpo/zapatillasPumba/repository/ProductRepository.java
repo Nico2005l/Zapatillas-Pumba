@@ -18,6 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.id = ?1")
     Optional<Product> findProductById(Long productId);
     
+    @Query("SELECT p FROM Product p WHERE p.title = :title")
     Optional<Product> findByTitle(String title);
 
     boolean existsById(Long productId);

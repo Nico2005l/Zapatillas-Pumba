@@ -4,7 +4,6 @@ import com.uade.tpo.zapatillasPumba.entity.Category;
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.controllers.products.ProductRequest;
 import com.uade.tpo.zapatillasPumba.exceptions.InvalidProductDataException;
-import com.uade.tpo.zapatillasPumba.exceptions.ProductAlreadyExistsException;
 import com.uade.tpo.zapatillasPumba.exceptions.ProductDuplicateException;
 import com.uade.tpo.zapatillasPumba.exceptions.ProductNotFoundException;
 import com.uade.tpo.zapatillasPumba.repository.ProductRepository;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

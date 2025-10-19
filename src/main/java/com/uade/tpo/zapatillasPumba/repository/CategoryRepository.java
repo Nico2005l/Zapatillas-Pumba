@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-
+    @Query("SELECT c FROM Category c WHERE c.nombre = :nombre")
     List<Category> findByNombre(String nombre);
 
     // Get all root categories
