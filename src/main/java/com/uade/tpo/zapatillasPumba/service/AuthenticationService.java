@@ -34,7 +34,7 @@ public class AuthenticationService {
                                 .email(request.getEmail())
                                 .username(request.getUsername())
                                 .password(passwordEncoder.encode(request.getPassword())) // Aca es donde encriptamoos la contraseña
-                                .role(request.getRole())
+                                .role(request.getRole()) // Por defecto, el usuario se registra con rol USER
                                 .isActive(true)
                                 .createdAt(java.time.LocalDateTime.now())
                                 .build();
