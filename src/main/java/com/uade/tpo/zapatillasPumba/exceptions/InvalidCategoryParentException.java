@@ -3,9 +3,9 @@ package com.uade.tpo.zapatillasPumba.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "La categoría padre es inválida")
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvalidCategoryParentException extends RuntimeException {
-    public InvalidCategoryParentException() {
-        super("La categoría padre es inválida");
+    public InvalidCategoryParentException(String message) {
+        super(message);
     }
 }

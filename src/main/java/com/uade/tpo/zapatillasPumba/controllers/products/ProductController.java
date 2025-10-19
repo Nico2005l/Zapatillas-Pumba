@@ -2,6 +2,7 @@ package com.uade.tpo.zapatillasPumba.controllers.products;
 
 import com.uade.tpo.zapatillasPumba.entity.Product;
 import com.uade.tpo.zapatillasPumba.service.Product.ProductService;
+import com.uade.tpo.zapatillasPumba.controllers.common.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

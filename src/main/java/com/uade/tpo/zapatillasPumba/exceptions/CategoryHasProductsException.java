@@ -3,9 +3,13 @@ package com.uade.tpo.zapatillasPumba.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.CONFLICT, reason = "La categoría tiene productos asociados y no puede eliminarse")
+@ResponseStatus(HttpStatus.CONFLICT)
 public class CategoryHasProductsException extends RuntimeException {
     public CategoryHasProductsException() {
-        super("La categoría tiene productos asociados y no puede eliminarse");
+        super("No se puede eliminar la categoría porque tiene productos asociados");
+    }
+
+    public CategoryHasProductsException(String message) {
+        super(message);
     }
 }
