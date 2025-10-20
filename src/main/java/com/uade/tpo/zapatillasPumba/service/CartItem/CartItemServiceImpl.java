@@ -42,9 +42,6 @@ public class CartItemServiceImpl implements CartItemService {
         cartItem.setCart(cart);
         cartItem.setProduct(product);
         cartItem.setQuantity(quantity);
-        cartItem.setSize(product.getSize());
-        cartItem.setColor(product.getColor());
-        cartItem.setGenre(product.getGenre());
 
         // Apply discount if exists
         Optional<Discount> discount = discountRepository.findByProductId(product.getId())

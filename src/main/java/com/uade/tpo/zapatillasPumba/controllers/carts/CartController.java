@@ -62,6 +62,9 @@ public class CartController {
         response.setId(item.getId());
         response.setProductId(item.getProduct().getId());
         response.setProductTitle(item.getProduct().getTitle());
+        response.setProductSize(item.getProduct().getSize());
+        response.setProductColor(item.getProduct().getColor());
+        response.setProductGenre(item.getProduct().getGenre());
         response.setUnitPrice(item.getProduct().getPrice());
         response.setDiscountApplied(item.getDiscountApplied());
         response.setQuantity(item.getQuantity());

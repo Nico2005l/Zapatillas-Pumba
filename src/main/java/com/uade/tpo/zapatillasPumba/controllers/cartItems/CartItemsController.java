@@ -46,16 +46,10 @@ public class CartItemsController {
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> removeCartItem(
+    public ResponseEntity<DeleteResponse> deleteCartItem(
             @PathVariable Long cartId,
             @PathVariable Long itemId) {
         cartItemService.removeCartItem(itemId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{cartItemId}")
-    public ResponseEntity<DeleteResponse> deleteCartItem(@PathVariable Long cartItemId) {
-        cartItemService.removeCartItem(cartItemId);
         return ResponseEntity.ok(new DeleteResponse("El item del carrito se ha borrado correctamente"));
     }
 }
