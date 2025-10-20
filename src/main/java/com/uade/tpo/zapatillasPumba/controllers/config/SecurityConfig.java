@@ -32,6 +32,7 @@ public class SecurityConfig {
                                                 // Rutas públicas para todos (autenticación y errores)
                                                 .requestMatchers("/auth/**", "/error/**").permitAll()
                                                 
+                                                
                                                 // GUEST puede ver productos, categorías e imágenes
                                                 .requestMatchers(HttpMethod.GET, "/products/**", "/categories/**", "/productImages/**").permitAll()
                                                 
@@ -46,8 +47,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/carts/**").permitAll()
                                                 .requestMatchers("/pedidos/**").permitAll()
 
-                                                // ADMIN tiene acceso a todo el resto (modificación de productos, categorías, imágenes)
-                                                .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority(Role.ADMIN.name())
+                                                // ADMIN tiene acceso a todo el resto (modificación de productos, categorías, imágenes)                                                .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority(Role.ADMIN.name())
+                                                .requestMatchers(HttpMethod.GET, "/users/**").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.PUT, "/categories/**", "/products/**", "/productImages/**", "/discounts/**").hasAuthority(Role.ADMIN.name())
                                                 .requestMatchers(HttpMethod.DELETE,"/users/**", "/categories/**", "/products/**", "/productImages/**", "/discounts/**", "/orders/**", "/order-items/**").hasAuthority(Role.ADMIN.name())
