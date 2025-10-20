@@ -9,10 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.uade.tpo.zapatillasPumba.entity.Role;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +29,17 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
+
+
+                        http.cors(cors -> cors.configurationSource(request -> {
+                        var corsConfig = new CorsConfiguration();
+                        corsConfig.setAllowedOrigins(List.of("http://localhost:5173"));
+                        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                        corsConfig.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+                        corsConfig.setExposedHeaders(List.of("Authorization"));
+                        corsConfig.setAllowCredentials(true);
+                        return corsConfig;
+                }))
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
                                                 // Rutas públicas para todos (autenticación y errores)

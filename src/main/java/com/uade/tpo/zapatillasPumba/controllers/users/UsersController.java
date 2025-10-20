@@ -2,6 +2,7 @@ package com.uade.tpo.zapatillasPumba.controllers.users;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 
@@ -51,6 +52,13 @@ public class UsersController {
 
 	@GetMapping("/me")
 	public ResponseEntity<UserResponse> getCurrentUser(@RequestHeader("Authorization") String token) {
+		System.out.println("Received token: " + token);
+		if (token == null || !token.startsWith("Bearer ")) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+
+    // Quita "Bearer " y espacios extra
+    	token = token.substring(7).trim();
 		User user = userService.getUserByToken(token);
 		if (user != null) {
 			UserResponse response = userMapper.toResponse(user);
