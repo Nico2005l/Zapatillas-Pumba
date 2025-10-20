@@ -40,6 +40,6 @@ public class UserServiceImpl implements UserService {
     public User getUserByToken(String token) {
         String username = jwtService.extractUsername(token);
         System.out.println("Extracted username: " + username);
-        return userRepository.findByEmail(username).orElse(null);
+        return userRepository.findByUsername(username).orElse(null);
     }
 }
