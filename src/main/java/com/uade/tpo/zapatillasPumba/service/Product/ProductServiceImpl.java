@@ -48,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
         product.setIsVisible(productRequest.getIsVisible());
         product.setSize(productRequest.getSize());
         product.setColor(productRequest.getColor());
+        product.setGenre(productRequest.getGenre());
         product.setCreatedAt(java.time.LocalDate.now());
         
         // Set up bidirectional relationship

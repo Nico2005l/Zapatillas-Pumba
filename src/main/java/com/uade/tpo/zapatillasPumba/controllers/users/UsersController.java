@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.uade.tpo.zapatillasPumba.entity.User;
 import com.uade.tpo.zapatillasPumba.service.User.UserService;
+import com.uade.tpo.zapatillasPumba.mapper.UserMapper;
+import com.uade.tpo.zapatillasPumba.controllers.users.UserResponse;
 
 
 @RestController
@@ -15,6 +17,9 @@ public class UsersController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserMapper userMapper;
 
 	@GetMapping
 	public ResponseEntity<List<UserResponse>> getUsers() {
@@ -25,10 +30,11 @@ public class UsersController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+	public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
 		User user = userService.getUserById(userId);
 		if (user != null) {
-			return ResponseEntity.ok(user);
+			UserResponse response = userMapper.toResponse(user);
+			return ResponseEntity.ok(response);
 		}
 		return ResponseEntity.notFound().build();
 	}
