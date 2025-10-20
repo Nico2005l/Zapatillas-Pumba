@@ -27,17 +27,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream()
-            .map(user -> {
-                UserResponse resp = new UserResponse();
-                resp.setFirstName(user.getFirstName());
-                resp.setLastName(user.getLastName());
-                resp.setEmail(user.getEmail());
-                resp.setUsername(user.getUsername());
-                return resp;
-            })
-            .toList();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override

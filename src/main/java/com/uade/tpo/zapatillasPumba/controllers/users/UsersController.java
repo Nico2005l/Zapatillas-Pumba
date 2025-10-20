@@ -23,7 +23,10 @@ public class UsersController {
 
 	@GetMapping
 	public ResponseEntity<List<UserResponse>> getUsers() {
-		List<UserResponse> users = userService.getAllUsers();
+		List<User> userList = userService.getAllUsers();
+		List<UserResponse> users = userList.stream()
+				.map(user -> userMapper.toResponse(user))
+				.toList();
 		
 
 		return ResponseEntity.ok(users);
