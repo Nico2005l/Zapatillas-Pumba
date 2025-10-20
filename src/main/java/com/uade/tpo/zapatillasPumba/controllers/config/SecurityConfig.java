@@ -42,6 +42,8 @@ public class SecurityConfig {
                 }))
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
+
+                                                .requestMatchers("/**").permitAll()
                                                 // Rutas públicas para todos (autenticación y errores)
                                                 .requestMatchers("/auth/**", "/error/**").permitAll()
                                                 

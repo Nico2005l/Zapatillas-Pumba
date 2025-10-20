@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -53,5 +54,10 @@ public class CartServiceImpl implements CartService {
     public void deleteCart(Long id) {
         Cart cart = getCartById(id);
         cartRepository.delete(cart);
+    }
+
+    @Override
+    public Optional<Cart> findByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
     }
 }

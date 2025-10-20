@@ -41,6 +41,12 @@ public class CartController {
         return ResponseEntity.ok(new DeleteResponse("El carrito se ha borrado correctamente"));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<CartResponse> getUserCart(@PathVariable Long userId) {
+        Cart cart = cartService.getUserCart(userId);
+        return ResponseEntity.ok(toCartResponse(cart));
+    }
+
     private CartResponse toCartResponse(Cart cart) {
         CartResponse response = new CartResponse();
         response.setId(cart.getId());

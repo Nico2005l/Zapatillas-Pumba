@@ -9,8 +9,6 @@ import java.util.List;
 import com.uade.tpo.zapatillasPumba.entity.User;
 import com.uade.tpo.zapatillasPumba.service.User.UserService;
 import com.uade.tpo.zapatillasPumba.mapper.UserMapper;
-import com.uade.tpo.zapatillasPumba.controllers.users.UserResponse;
-
 
 @RestController
 @RequestMapping("users")
