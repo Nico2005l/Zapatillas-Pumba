@@ -22,6 +22,14 @@ public class CartItem {
     private Product product;
 
     private Integer quantity;
+    @Column
+    private Integer size;
+
+    @Column
+    private String color;
+
+    @Column
+    private String genre;
 
     @Column(name = "discount_applied")
     private Double discountApplied;

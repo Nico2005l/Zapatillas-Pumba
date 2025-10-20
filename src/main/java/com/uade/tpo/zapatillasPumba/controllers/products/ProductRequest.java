@@ -13,10 +13,10 @@ public class ProductRequest {
     private String descripcionLarga;
     private Double price;
     private Integer stock;
-    private Boolean isVisible;
-    private Long categoryId;
-    private List<ProductImage> productImages;
     private Integer size;
     private String color;
     private String genre;
+    private Boolean isVisible;
+    private Long categoryId;
+    private List<ProductImage> productImages;
 }
