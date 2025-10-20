@@ -27,6 +27,8 @@ public class AuthenticationService {
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
 
+        
+
         /* Al registrarse, agarra el request mandado y crea un objeto User con sus datos */
         public AuthenticationResponse register(RegisterRequest request) {
                 var user = User.builder() // Podemos usar el patron builder porque usamos la anotacion @Builder en la clase User
@@ -42,6 +44,7 @@ public class AuthenticationService {
 
                 repository.save(user); // Guardamos el usuario en la base de datos
                 var jwtToken = jwtService.generateToken(user); // Generamos el token JWT para el usuario
+                
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .build();
@@ -66,11 +69,6 @@ public class AuthenticationService {
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
-                                .user_Name(user.getFirstName())
-                                .user_LastName(user.getLastName())
-                                .user_Email(user.getEmail())
-                                .user_Username(user.getUsername())
-                                .user_Creation(user.getCreatedAt())
                                 .build();
         }
 }

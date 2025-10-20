@@ -46,6 +46,16 @@ public class UsersController {
 		return ResponseEntity.ok("Usuario eliminado correctamente");
 	}
 
+	@GetMapping("/me")
+	public ResponseEntity<UserResponse> getCurrentUser(@RequestHeader("Authorization") String token) {
+		User user = userService.getUserByToken(token);
+		if (user != null) {
+			UserResponse response = userMapper.toResponse(user);
+			return ResponseEntity.ok(response);
+		}
+		return ResponseEntity.notFound().build();
+	}
+
 	// A futuro podemos implementar updateUser si es necesario, para eso estaba el UserRequest originalmente
 
 }

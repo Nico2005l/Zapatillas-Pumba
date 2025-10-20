@@ -17,15 +17,5 @@ public class AuthenticationResponse {
 
     @JsonProperty("access_token")
     private String accessToken;
-    @JsonProperty("user_name")
-    private String user_Name;
-    @JsonProperty("user_lastName")
-    private String user_LastName;
-    @JsonProperty("user_email")
-    private String user_Email;
-    @JsonProperty("user_username")
-    private String user_Username;
-    @JsonProperty("user_creation")
-    private LocalDateTime user_Creation;
 
 }
