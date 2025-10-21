@@ -12,6 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -48,7 +49,11 @@ public class PedidoServiceImpl implements PedidoService {
             pedido.getItems().add(pedidoItem);
         }
 
-        pedido.setTotalAmount(cart.getTotal());
+        double total = pedido.getItems().stream()
+            .mapToDouble(PedidoItem::getSubtotal)
+            .sum();
+        pedido.setTotalAmount(total);
+
         Pedido savedPedido = pedidoRepository.save(pedido);
         
         // Clear the cart after creating pedido
