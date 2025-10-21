@@ -90,8 +90,7 @@ public class CartItemServiceImpl implements CartItemService {
     public Double getDiscountedPrice(CartItem item) {
         Double basePrice = item.getProduct().getPrice();
         Double discountValue = item.getDiscountApplied() != null ? item.getDiscountApplied() : 0.0;
-        // Multiply by 100 to convert from decimal to percentage
-        return basePrice * (1 - (discountValue * 100 / 100));
+        return basePrice * (1 - (discountValue));
     }
 
     @Override

@@ -58,7 +58,10 @@ public class CartController {
             .collect(Collectors.toList()));
         
         response.setCreatedAt(cart.getCreatedAt());
-        response.setTotal(cart.getTotal());
+        response.setTotal(cart.getCartItems().stream()
+            .mapToDouble(cartItemService::getSubtotal)
+            .sum()
+        );
         
         return response;
     }
