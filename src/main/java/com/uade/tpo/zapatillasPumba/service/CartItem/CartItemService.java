@@ -10,4 +10,5 @@ public interface CartItemService {
     List<CartItem> getCartItems(Long cartId);
     Double getDiscountedPrice(CartItem item);
     Double getSubtotal(CartItem item);
+    void clearCartItems(Long cartId);
 }

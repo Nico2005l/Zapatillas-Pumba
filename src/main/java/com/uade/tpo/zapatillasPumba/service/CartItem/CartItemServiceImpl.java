@@ -82,6 +82,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    public void clearCartItems(Long cartId) {
+        cartItemRepository.deleteAllCartItemsByCartId(cartId);
+    }
+
+    @Override
     public Double getDiscountedPrice(CartItem item) {
         Double basePrice = item.getProduct().getPrice();
         Double discountValue = item.getDiscountApplied() != null ? item.getDiscountApplied() : 0.0;

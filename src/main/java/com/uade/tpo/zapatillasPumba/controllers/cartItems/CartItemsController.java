@@ -52,4 +52,10 @@ public class CartItemsController {
         cartItemService.removeCartItem(itemId);
         return ResponseEntity.ok(new DeleteResponse("El item del carrito se ha borrado correctamente"));
     }
+
+    @DeleteMapping
+    public ResponseEntity<DeleteResponse> deleteAllCartItems(@PathVariable Long cartId) {
+        cartItemService.clearCartItems(cartId);
+        return ResponseEntity.ok(new DeleteResponse("Todos los items del carrito se han borrado correctamente"));
+    }
 }
