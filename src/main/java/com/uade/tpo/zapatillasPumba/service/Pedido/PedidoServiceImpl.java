@@ -1,15 +1,17 @@
 package com.uade.tpo.zapatillasPumba.service.Pedido;
 
 import com.uade.tpo.zapatillasPumba.entity.*;
+import com.uade.tpo.zapatillasPumba.exceptions.InsufficientStockException;
 import com.uade.tpo.zapatillasPumba.exceptions.PedidoNotFoundException;
 import com.uade.tpo.zapatillasPumba.repository.PedidoRepository;
 import com.uade.tpo.zapatillasPumba.service.Cart.CartService;
 import com.uade.tpo.zapatillasPumba.service.CartItem.CartItemService;
+import com.uade.tpo.zapatillasPumba.service.Product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
-
+import com.uade.tpo.zapatillasPumba.controllers.products.ProductRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.DoubleStream;
@@ -25,6 +27,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Autowired
     private CartItemService cartItemService;
 
+    @Autowired
+    private ProductService productService; // Add this autowired dependency
+
     @Override
     @Transactional
     public Pedido createPedidoFromCart(Long userId) {
@@ -33,11 +38,24 @@ public class PedidoServiceImpl implements PedidoService {
             throw new IllegalStateException("Cannot create pedido from empty cart");
         }
 
+        // Verify stock availability before processing
+        for (CartItem cartItem : cart.getCartItems()) {
+            Product product = cartItem.getProduct();
+            if (product.getStock() < cartItem.getQuantity()) {
+                throw new InsufficientStockException(
+                    String.format("Insufficient stock for product %s. Available: %d, Requested: %d", 
+                        product.getTitle(), 
+                        product.getStock(), 
+                        cartItem.getQuantity())
+                );
+            }
+        }
+
         Pedido pedido = new Pedido();
         pedido.setUser(cart.getUser());
         pedido.setCreatedAt(LocalDateTime.now());
 
-        // Transfer cart items to pedido items
+        // Transfer cart items to pedido items and update stock
         for (CartItem cartItem : cart.getCartItems()) {
             PedidoItem pedidoItem = new PedidoItem();
             pedidoItem.setPedido(pedido);
@@ -47,6 +65,22 @@ public class PedidoServiceImpl implements PedidoService {
             pedidoItem.setDiscountApplied(cartItem.getDiscountApplied());
             pedidoItem.setSubtotal(cartItemService.getSubtotal(cartItem));
             pedido.getItems().add(pedidoItem);
+
+            // Update product stock
+            Product currentProduct = cartItem.getProduct();
+            ProductRequest updateRequest = new ProductRequest();
+            updateRequest.setTitle(currentProduct.getTitle());
+            updateRequest.setDescripcionCorta(currentProduct.getDescripcionCorta());
+            updateRequest.setDescripcionLarga(currentProduct.getDescripcionLarga());
+            updateRequest.setPrice(currentProduct.getPrice());
+            updateRequest.setStock(currentProduct.getStock() - cartItem.getQuantity());
+            updateRequest.setIsVisible(currentProduct.getIsVisible());
+            updateRequest.setSize(currentProduct.getSize());
+            updateRequest.setColor(currentProduct.getColor());
+            updateRequest.setGenre(currentProduct.getGenre());
+            updateRequest.setCategoryId(currentProduct.getCategory().getId());
+
+            productService.updateProduct(currentProduct.getId(), updateRequest);
         }
 
         double total = pedido.getItems().stream()
