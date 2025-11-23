@@ -83,7 +83,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public void clearCartItems(Long cartId) {
-        cartItemRepository.deleteAllCartItemsByCartId(cartId);
+        List<CartItem> items = cartItemRepository.findByCartId(cartId);
+        cartItemRepository.deleteAll(items);
     }
 
     @Override
